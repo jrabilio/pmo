@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PMO NTICS — Planejamento 2026</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700;800&display=swap');
+
+:root{
+  --green:#6abf4b; --green-d:#4a9a2e; --green-dd:#155e1b;
+  --gray:#6b7280; --gray-d:#1f2937; --gray-l:#f3f4f6;
+  --white:#fff; --bg:#f5f7f4; --radius:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Barlow',sans-serif;background:var(--bg);color:var(--gray-d)}
+
+/* HEADER */
+.hdr{background:var(--white);border-bottom:3px solid var(--green);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.hdr img{height:50px}
+.hdr-title{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;color:var(--gray-d)}
+.hdr-title span{color:var(--green)}
+.hdr-meta{font-size:11px;color:var(--gray);text-align:right}
+
+/* TABS */
+.tabs{display:flex;background:var(--white);border-bottom:2px solid #e5e7eb;padding:0 28px;flex-wrap:wrap}
+.tab{padding:11px 22px;font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:.4px;text-transform:uppercase;color:var(--gray);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;user-select:none}
+.tab:hover{color:var(--green)}
+.tab.active{color:var(--green);border-bottom-color:var(--green)}
+
+.content{padding:20px 28px}
+.panel{display:none}.panel.active{display:block}
+
+/* LEGEND */
+.legend{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.leg-lbl{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:500}
+.leg-dot{width:13px;height:13px;border-radius:3px;flex-shrink:0}
+.leg-marco{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#7c3aed;color:#fff;font-size:10px;font-weight:700}
+
+/* FILTER */
+.team-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.tm{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:5px 8px;border-radius:8px;border:2px solid transparent}
+.tm:hover{background:#f0fdf4;border-color:var(--green)}
+.tm.on{background:#dcfce7;border-color:var(--green-d)}
+.tm.on .tm-name{color:var(--green-d);font-weight:700}
+.av{width:38px;height:38px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid #e5e7eb}
+.tm.on .av{border-color:var(--green)}
+.tm-name{font-size:10px;font-weight:500;color:var(--gray)}
+.tm.transversal .av{border-color:#a78bfa;border-style:dashed}
+.tm.transversal.on .av{border-color:#7c3aed;border-style:solid}
+.clr-btn{font-size:11px;color:var(--gray);cursor:pointer;text-decoration:underline;margin-left:4px}
+.clr-btn:hover{color:var(--green-d)}
+.tm-divider{width:1px;height:40px;background:#e5e7eb;margin:0 4px}
+
+/* RESP SWAP DROPDOWN */
+.resp-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.resp-wrap>img{width:26px;height:26px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid var(--white);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:pointer;transition:box-shadow .15s;flex-shrink:0}
+.resp-wrap>img:hover{box-shadow:0 0 0 2px var(--green)}
+.resp-dropdown{display:none;position:absolute;top:34px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.15);z-index:300;min-width:150px;padding:5px 0;text-align:left}
+.resp-wrap.open .resp-dropdown{display:block}
+.resp-option{display:flex;align-items:center;gap:7px;padding:5px 10px;cursor:pointer;font-size:11px;font-weight:500;color:var(--gray-d);transition:background .1s;white-space:nowrap}
+.resp-option:hover{background:#f0fdf4}
+.resp-option img{width:22px;height:22px;border-radius:50%;object-fit:cover;object-position:center top;border:1px solid #e5e7eb;flex-shrink:0}
+.resp-option.current{background:#dcfce7;color:var(--green-d);font-weight:600}
+.swap-badge{position:absolute;top:-4px;right:-6px;font-size:8px;background:#fbbf24;color:#78350f;border-radius:3px;padding:0 3px;font-weight:700;line-height:1.4;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+
+/* STATS */
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.stat{background:var(--white);border:1px solid #e5e7eb;border-radius:var(--radius);padding:10px 18px;text-align:center;min-width:100px}
+.stat-n{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:700;color:var(--green);line-height:1}
+.stat-l{font-size:10px;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+
+/* GANTT */
+.gantt-wrap{overflow-x:auto;overflow-y:visible;border-radius:var(--radius);box-shadow:0 1px 4px rgba(0,0,0,.07);background:var(--white)}
+.gantt-wrap.drop-open{overflow:visible}
+table.gt{width:100%;border-collapse:collapse;font-size:11px;min-width:1100px}
+table.gt thead th{background:var(--gray-d);color:var(--white);padding:9px 6px;text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:.4px;white-space:nowrap;border:1px solid #374151}
+table.gt thead th.th-proj{text-align:left;padding-left:12px;min-width:220px}
+table.gt thead th.th-resp{min-width:70px}
+table.gt thead th.th-m{width:62px}
+table.gt thead th.th-cur{background:var(--green)}
+table.gt thead th.th-cur::after{content:"▲ JUN";font-size:8px;display:block;opacity:.8}
+table.gt tbody tr:nth-child(even) td{background:#fafafa}
+table.gt tbody tr:hover td{background:#f0fdf4}
+table.gt tbody tr.hidden{display:none}
+table.gt tbody tr.row-previsto td{background:#fefce8;border-top:2px dashed #fbbf24}
+table.gt td{padding:3px 4px;border:1px solid #e5e7eb;vertical-align:middle}
+table.gt td.td-proj{padding:5px 12px;min-width:220px;line-height:1.3}
+table.gt td.td-proj .pname{font-weight:700;font-size:11px;color:var(--gray-d)}
+table.gt td.td-proj .pclient{font-size:10px;color:var(--gray)}
+table.gt td.td-proj .pid{font-family:'Barlow Condensed',sans-serif;font-size:10px;color:var(--green-d);font-weight:700}
+table.gt td.td-resp{text-align:center;padding:3px}
+.resp-avs{display:flex;justify-content:center;gap:2px;flex-wrap:wrap}
+.resp-avs img{width:26px;height:26px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid var(--white);box-shadow:0 1px 3px rgba(0,0,0,.2)}
+
+.month-cell{display:flex;flex-direction:column;gap:2px;padding:2px;min-height:32px;justify-content:center;position:relative}
+.ph-block{display:flex;align-items:center;gap:3px;border-radius:4px;padding:2px 4px;min-height:20px}
+.ph-block .ph-lbl{font-size:8px;font-weight:700;color:var(--white);text-transform:uppercase;letter-spacing:.2px;line-height:1;flex:1}
+.ph-block img{width:16px;height:16px;border-radius:50%;object-fit:cover;object-position:center top;border:1px solid rgba(255,255,255,.6);flex-shrink:0}
+.ph-block.ph-previsto{background:repeating-linear-gradient(45deg,#d1d5db,#d1d5db 4px,#e5e7eb 4px,#e5e7eb 8px)}
+.ph-block.ph-previsto .ph-lbl{color:#374151}
+
+/* PRÉ-PONTUAL (ação curta) */
+.ph-block.ph-pontual{background:#fffbeb;border:1.5px dashed #f59e0b;padding:1px 4px;min-height:16px}
+.ph-block.ph-pontual .ph-lbl{color:#b45309;font-size:7px}
+
+/* FAIXAS DE GRUPO NO GANTT */
+tr.group-band td{background:var(--gray-d)!important;padding:0!important;border:none!important}
+tr.group-band .band-inner{display:flex;align-items:center;gap:10px;padding:7px 14px}
+tr.group-band .band-title{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:#fff;text-transform:uppercase;letter-spacing:.6px}
+tr.group-band .band-count{font-size:10px;color:#9ca3af;background:rgba(255,255,255,.1);padding:2px 8px;border-radius:10px}
+tr.group-band.band-realizacao td{background:linear-gradient(to right,#155e1b,#1f2937)!important}
+tr.group-band.band-previsto td{background:linear-gradient(to right,#92400e,#1f2937)!important}
+
+/* PHASE PERSON SWAP (engajamento) */
+.ph-block.editable{cursor:pointer}
+.ph-block.editable:hover{outline:2px solid rgba(255,255,255,.85);outline-offset:-1px}
+.ph-who{position:relative;display:inline-flex;flex-shrink:0}
+.ph-who-drop{display:none;position:absolute;top:20px;left:0;background:#fff;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,.15);z-index:300;min-width:140px;padding:5px 0;text-align:left}
+.ph-who.open .ph-who-drop{display:block}
+.ph-who-opt{display:flex;align-items:center;gap:7px;padding:5px 10px;cursor:pointer;font-size:11px;font-weight:500;color:var(--gray-d);transition:background .1s;white-space:nowrap}
+.ph-who-opt:hover{background:#f0fdf4}
+.ph-who-opt img{width:20px;height:20px;border-radius:50%;object-fit:cover;object-position:center top;border:1px solid #e5e7eb;flex-shrink:0}
+.ph-who-opt.current{background:#dcfce7;color:var(--green-d);font-weight:600}
+.ph-who-opt.clear-opt{border-top:1px solid #f3f4f6;color:#9ca3af;font-size:10px}
+.marco-ki{position:absolute;top:-3px;right:-3px;width:16px;height:16px;border-radius:50%;background:#7c3aed;color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3);z-index:2}
+.marco-kc{position:absolute;top:-3px;left:-3px;width:16px;height:16px;border-radius:50%;background:#0d9488;color:#fff;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3);z-index:2}
+
+.previsto-badge{display:inline-block;background:#fef3c7;border:1px solid #fbbf24;color:#92400e;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;margin-left:8px}
+
+.fnote{margin-top:16px;padding:12px 16px;background:#fefce8;border:1px solid #fde68a;border-radius:var(--radius);font-size:12px;color:#92400e;line-height:1.6}
+.fnote strong{color:#78350f}
+.inote{padding:12px 16px;background:#eff6ff;border:1px solid #bfdbfe;border-radius:var(--radius);font-size:12px;color:#1e3a8a;line-height:1.6;margin-bottom:16px}
+
+/* SECTION */
+.sec-hdr{display:flex;align-items:center;gap:12px;margin:20px 0 14px}
+.sec-hdr h2{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:var(--gray-d);text-transform:uppercase;letter-spacing:.4px}
+.sec-bar{flex:1;height:2px;background:linear-gradient(to right,var(--green),transparent)}
+.sec-badge{background:var(--green);color:var(--white);padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700}
+
+/* SUBVIEW SWITCHER */
+.subviews{display:inline-flex;background:#e5e7eb;border-radius:8px;padding:3px;margin-bottom:18px;gap:2px;flex-wrap:wrap}
+.subview-btn{padding:7px 14px;font-size:12px;font-weight:600;color:var(--gray);cursor:pointer;border-radius:6px;user-select:none;font-family:'Barlow Condensed',sans-serif;letter-spacing:.3px;text-transform:uppercase}
+.subview-btn:hover{color:var(--gray-d)}
+.subview-btn.active{background:var(--white);color:var(--green-d);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.subview-panel{display:none}.subview-panel.active{display:block}
+
+/* COORD BLOCK */
+.coord-block{margin-bottom:24px}
+.coord-hdr{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--gray-d);border-radius:var(--radius) var(--radius) 0 0}
+.coord-hdr img{width:36px;height:36px;border-radius:50%;object-fit:cover;object-position:center top;border:2px solid var(--green)}
+.coord-hdr.area-hdr img{border-color:#a78bfa}
+.coord-hdr .cname{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--white);letter-spacing:.4px;text-transform:uppercase}
+.coord-hdr .ccount{font-size:11px;color:#9ca3af;margin-left:auto}
+.coord-hdr .crole{font-size:11px;color:#cbd5e1;font-style:italic}
+
+.jun-table{width:100%;border-collapse:collapse;font-size:12px;background:var(--white);border:1px solid #e5e7eb;border-radius:0 0 var(--radius) var(--radius);overflow:hidden}
+.jun-table th{background:#f3f4f6;padding:8px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid #e5e7eb}
+.jun-table td{padding:8px 12px;border-bottom:1px solid #f3f4f6;vertical-align:middle;font-size:12px}
+.jun-table tr:last-child td{border-bottom:none}
+.jun-table tr:hover td{background:#f9fafb}
+.jun-ph{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;color:var(--white);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin:1px}
+.jun-ph.ph-previsto{color:#374151}
+.jun-guest{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--gray-d)}
+.jun-guest img{width:22px;height:22px;border-radius:50%;object-fit:cover;object-position:center top;border:1px solid var(--green)}
+
+/* WEEK COLUMNS */
+.wk3-table{width:100%;border-collapse:collapse;font-size:11px;background:var(--white);border:1px solid #e5e7eb;border-radius:0 0 var(--radius) var(--radius);overflow:hidden}
+.wk3-table th{background:#f3f4f6;padding:8px 10px;text-align:center;font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.3px;border:1px solid #e5e7eb}
+.wk3-table th.th-pj{text-align:left;min-width:180px}
+.wk3-table th.th-wk{width:130px;background:#ecfdf5;color:var(--green-dd)}
+.wk3-table th.th-wk small{display:block;font-size:9px;font-weight:400;color:var(--gray);font-family:'Barlow',sans-serif}
+.wk3-table td{padding:6px 8px;border:1px solid #e5e7eb;vertical-align:middle}
+.wk3-table td.td-pj{font-weight:600;color:var(--gray-d);font-size:11px}
+.wk3-table td.td-pj small{display:block;color:var(--gray);font-weight:400;font-size:10px}
+.wk3-table tr:hover td{background:#f9fafb}
+.wk3-cell{display:flex;flex-direction:column;gap:2px;align-items:center}
+.wk3-tag{display:inline-flex;align-items:center;gap:3px;padding:2px 6px;border-radius:3px;font-size:9px;font-weight:700;color:var(--white);text-transform:uppercase;width:100%;justify-content:center}
+.wk3-tag.ph-previsto{color:#374151}
+.wk3-tag img{width:13px;height:13px;border-radius:50%;object-fit:cover;border:1px solid #fff}
+
+/* CALENDAR */
+.cal-legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+.cal-leg{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600}
+.cal-leg .cl-dot{width:16px;height:16px;border-radius:4px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;background:var(--white);padding:14px;border-radius:var(--radius);box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.cal-dow{text-align:center;font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;padding:4px;letter-spacing:.5px}
+.cal-day{min-height:110px;border:1px solid #e5e7eb;border-radius:6px;padding:5px;background:#fafafa;position:relative}
+.cal-day.empty{background:transparent;border:none}
+.cal-day.weekend{background:#f3f4f6}
+.cal-daynum{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;color:var(--gray);position:absolute;top:4px;right:7px}
+.cal-events{margin-top:18px;display:flex;flex-direction:column;gap:4px}
+/* Modelo B — fundo tinto na cor do projeto */
+.cal-ev{font-size:9px;line-height:1.2;cursor:default;border-radius:4px;padding:3px 5px;border-left:3px solid var(--c);background:color-mix(in srgb, var(--c) 10%, #fff)}
+.cal-ev .ce-top{display:flex;align-items:center;gap:3px;min-width:0}
+.cal-ev .ce-av{width:13px;height:13px;border-radius:50%;object-fit:cover;border:1px solid #fff;flex:none}
+.cal-ev .ce-pid{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:9px;color:#fff;background:var(--c);padding:0 4px;border-radius:3px;flex:none}
+.cal-ev .ce-spon{font-size:7.5px;font-weight:700;text-transform:uppercase;letter-spacing:.2px;color:var(--c);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cal-ev .ce-act{font-size:8.5px;color:#4b5563;margin-top:1px;line-height:1.18}
+.cal-ev .ce-tags{display:flex;gap:2px;margin-top:2px;flex-wrap:wrap}
+.cal-ev .ce-capt{font-size:7px;font-weight:700;background:#fce7f3;color:#be185d;border:1px solid #fbcfe8;border-radius:10px;padding:0 4px}
+.cal-ev .ce-ntics{font-size:7px;font-weight:700;background:#dcfce7;color:#166534;border:1px solid #bbf7d0;border-radius:10px;padding:0 4px}
+
+/* AREA SECTOR */
+.area-card{margin-bottom:18px;background:var(--white);border:1px solid #e5e7eb;border-radius:var(--radius);overflow:hidden}
+.area-hl-list{padding:8px 14px 12px}
+.area-hl-item{display:flex;gap:10px;padding:6px 0;border-bottom:1px dashed #f3f4f6;font-size:12px;align-items:flex-start}
+.area-hl-item:last-child{border-bottom:none}
+.area-hl-item .ahl-title{font-weight:600;color:var(--gray-d);flex:1;min-width:0}
+.area-hl-item .ahl-detail{color:var(--gray);font-size:11px;flex:1.4}
+.area-projects{padding:8px 14px;background:#fafafa;border-bottom:1px solid #f3f4f6;font-size:11px;color:var(--gray)}
+.area-projects strong{color:var(--gray-d)}
+.area-tag{display:inline-block;background:#e0e7ff;color:#3730a3;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:700;margin-right:3px}
+
+/* RECONCILIAÇÃO */
+.recon-intro{background:var(--white);border:1px solid #e5e7eb;border-left:4px solid var(--green);border-radius:var(--radius);padding:18px 22px;margin-bottom:20px;line-height:1.7;font-size:13px}
+.recon-intro h3{font-family:'Barlow Condensed',sans-serif;font-size:16px;color:var(--gray-d);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px}
+.recon-phase{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start}
+.recon-num{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--green);color:var(--white);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;font-family:'Barlow Condensed',sans-serif}
+.recon-phase.future .recon-num{background:#9ca3af}
+.recon-phase.done .recon-num{background:#22c55e}
+.recon-txt{font-size:13px;line-height:1.5}
+.recon-txt strong{color:var(--gray-d)}
+.depara-table{width:100%;border-collapse:collapse;font-size:12px;background:var(--white);border:1px solid #e5e7eb;border-radius:var(--radius);overflow:hidden;margin-top:8px}
+.depara-table th{background:var(--gray-d);color:var(--white);padding:8px 12px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.depara-table td{padding:7px 12px;border-bottom:1px solid #f3f4f6}
+.depara-table tr:last-child td{border-bottom:none}
+.depara-arrow{color:var(--green-d);font-weight:700}
+.tag-pill{display:inline-block;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;color:#fff}
+.badge-soon{display:inline-block;background:#dbeafe;color:#1e40af;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:6px}
+.badge-now{display:inline-block;background:#dcfce7;color:#166534;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:6px}
+
+/* ── HISTÓRICO HANDS ON ── */
+.ho-intro{background:var(--white);border:1px solid #e5e7eb;border-left:3px solid var(--green);border-radius:var(--radius);padding:12px 16px;font-size:12.5px;line-height:1.55;color:var(--gray-d);margin-bottom:16px}
+.ho-chip-atual-inline{display:inline-block;background:var(--green-d);color:#fff;font-size:9px;font-weight:700;letter-spacing:.5px;padding:1px 6px;border-radius:4px;vertical-align:middle}
+.ho-strip{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.ho-week{position:relative;min-width:130px;background:var(--white);border:1px solid #e5e7eb;border-radius:var(--radius);padding:10px 12px;cursor:pointer;transition:border-color .15s,box-shadow .15s;user-select:none}
+.ho-week:hover{border-color:var(--green);box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.ho-week.on{border-color:var(--green-d);box-shadow:0 0 0 2px var(--green)}
+.ho-week.empty{opacity:.7;cursor:default;border-style:dashed}
+.ho-week.empty:hover{border-color:#e5e7eb;box-shadow:none}
+.ho-wk-id{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--gray-d);line-height:1}
+.ho-week.on .ho-wk-id{color:var(--green-d)}
+.ho-wk-range{font-size:10.5px;color:var(--gray);margin-top:2px}
+.ho-wk-meta{font-size:9.5px;color:#9ca3af;margin-top:4px}
+.ho-wk-badge{position:absolute;top:-7px;right:-6px;font-size:8px;font-weight:700;letter-spacing:.5px;color:#fff;background:var(--green-d);border-radius:4px;padding:1px 5px;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.ho-wk-badge.empty-badge{background:#9ca3af}
+.ho-viewer{background:var(--white);border:1px solid #e5e7eb;border-radius:var(--radius);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.ho-viewer-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 14px;background:var(--gray-l);border-bottom:1px solid #e5e7eb;font-size:11.5px;color:var(--gray-d)}
+.ho-viewer-bar strong{font-family:'Barlow Condensed',sans-serif;font-size:14px}
+.ho-open-link{margin-left:auto;font-size:11px;font-weight:600;color:var(--green-d);text-decoration:none;border:1px solid var(--green);border-radius:6px;padding:3px 10px;background:#f0fdf4}
+.ho-open-link:hover{background:#dcfce7}
+.ho-frame-wrap{position:relative}
+.ho-frame-wrap iframe{width:100%;height:78vh;min-height:560px;border:0;display:block;background:#fff}
+.ho-empty-state{padding:60px 20px;text-align:center;color:var(--gray)}
+.ho-empty-state .ico{font-size:34px;display:block;margin-bottom:10px;opacity:.5}
+.ho-empty-state code{background:var(--gray-l);padding:1px 6px;border-radius:4px;font-size:11px}
+
+/* ── DETALHADO / SEMANAS (matriz viva ClickUp) ── */
+.det-summary{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:14px;font-size:12px}
+.det-sum-pill{background:var(--white);border:1px solid #e5e7eb;border-radius:999px;padding:5px 12px;font-weight:600;color:var(--gray-d);display:inline-flex;align-items:center;gap:6px}
+.det-sum-pill b{color:var(--green-dd);font-weight:800}
+.det-sum-pill .wbar{display:inline-flex;gap:3px;align-items:center}
+.det-sum-pill .wseg{font-size:10px;color:var(--gray);font-weight:600}
+.det-alert{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:8px;padding:8px 12px;font-size:11.5px;margin-bottom:14px;line-height:1.45}
+.det-alert b{color:#7c2d12}
+.det-grid{display:grid;grid-template-columns:230px repeat(4,minmax(180px,1fr));gap:0;border:1px solid #e5e7eb;border-radius:var(--radius);overflow:hidden;background:#e5e7eb}
+.det-h{background:#f3f4f6;padding:9px 10px;font-size:11px;font-weight:800;color:var(--gray);text-transform:uppercase;letter-spacing:.3px;text-align:center}
+.det-h small{display:block;font-size:9px;font-weight:500;color:var(--gray);font-family:'Barlow',sans-serif;text-transform:none;letter-spacing:0}
+.det-h-proj{text-align:left}
+.det-h-wk{background:#ecfdf5;color:var(--green-dd)}
+.det-h-now{background:var(--green-dd);color:#fff;position:relative}
+.det-h-now small{color:#d1fae5}
+.det-h-now::after{content:'semana atual';position:absolute;top:3px;right:6px;font-size:7.5px;font-weight:700;letter-spacing:.4px;opacity:.85}
+.det-proj{background:var(--white);padding:10px;border-top:1px solid #e5e7eb;display:flex;flex-direction:column;gap:5px}
+.det-proj-top{display:flex;align-items:center;gap:7px}
+.det-badge{flex:0 0 auto;min-width:30px;height:20px;padding:0 6px;border-radius:5px;color:#fff;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center}
+.det-proj-name{font-size:11.5px;font-weight:700;color:var(--gray-d);line-height:1.15}
+.det-proj-sp{font-size:10px;color:var(--gray);font-weight:500}
+.det-fase{align-self:flex-start;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:999px;display:inline-flex;align-items:center;gap:4px;text-transform:uppercase;letter-spacing:.2px}
+.det-cell{background:var(--white);border-top:1px solid #e5e7eb;border-left:1px solid #f1f5f9;padding:6px;display:flex;flex-direction:column;gap:5px;min-height:46px}
+.det-cell.now{background:#f7fdf9}
+.det-chip{border-left:3px solid #9ca3af;background:#f9fafb;border-radius:5px;padding:5px 7px;font-size:10.5px;line-height:1.25}
+.det-chip-name{font-weight:600;color:var(--gray-d);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.det-chip-meta{display:flex;align-items:center;gap:5px;margin-top:3px;font-size:9.5px;color:var(--gray);font-weight:500}
+.det-chip-meta .pdot{width:6px;height:6px;border-radius:50%;flex:0 0 auto}
+.det-chip.over{background:#fef2f2;border-left-color:#dc2626}
+.det-chip.over .det-chip-meta{color:#b91c1c;font-weight:600}
+.det-clock{font-size:10px}
+.det-chip.rotina{border-left-style:dashed;border-left-width:3px;background:#eff6ff}
+.det-chip.rotina .det-chip-name::before{content:'🔁 ';font-size:10px}
+.det-cell-empty{color:#d1d5db;font-size:14px;text-align:center;padding-top:6px;user-select:none}
+.det-cell-count{font-size:9px;color:var(--gray);font-weight:700;text-align:right;margin-top:auto;padding-top:2px;opacity:.6}
+/* ===== Detalhado v1: Plano B (baseline congelado) ===== */
+.det-freeze{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#eef2ff;border:1px solid #c7d2fe;color:#3730a3;border-radius:8px;padding:8px 12px;font-size:11.5px;margin-bottom:12px;line-height:1.45}
+.det-freeze b{color:#312e81}
+.det-sim-btn{margin-left:auto;border:1px solid #c7d2fe;background:#fff;color:#4338ca;border-radius:999px;padding:4px 12px;font-size:11px;font-weight:700;cursor:pointer}
+.det-sim-btn:hover{background:#eef2ff}
+.det-simbar{background:repeating-linear-gradient(45deg,#fff7ed,#fff7ed 10px,#ffedd5 10px,#ffedd5 20px);border:1px dashed #fb923c;color:#9a3412;border-radius:8px;padding:9px 12px;font-size:11px;margin-bottom:12px;line-height:1.5}
+.det-simbar b{color:#7c2d12}
+.det-legend2{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;font-size:10px}
+.det-lg{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid #e5e7eb;border-radius:999px;padding:3px 9px;font-weight:600;color:var(--gray-d)}
+.det-lg i{width:9px;height:9px;border-radius:2px;display:inline-block;flex:0 0 auto}
+.det-adh{display:flex;align-items:center;gap:6px;margin-top:3px}
+.det-adh-bar{flex:1;height:5px;background:#eef2f7;border-radius:3px;overflow:hidden;min-width:50px}
+.det-adh-fill{height:100%;background:var(--green-d)}
+.det-adh-num{font-size:9px;font-weight:800;color:var(--green-dd);white-space:nowrap}
+.det-adh-x{font-size:8.5px;color:var(--gray);font-weight:600;white-space:nowrap;margin-top:1px}
+.det-selo{display:inline-flex;align-items:center;gap:3px;font-size:8.5px;font-weight:800;padding:1px 5px;border-radius:999px;margin-top:3px;letter-spacing:.2px;width:fit-content}
+.selo-slip{background:#fef3c7;color:#92400e;border:1px solid #fde68a}
+.selo-early{background:#dbeafe;color:#1e40af;border:1px solid #bfdbfe}
+.selo-new{background:#dcfce7;color:#166534;border:1px solid #bbf7d0}
+.selo-sim{background:#ffe4e6;color:#9f1239;border:1px solid #fecdd3}
+.det-ghost{border:1px dashed #cbd5e1;background:repeating-linear-gradient(45deg,#fafafa,#fafafa 6px,#f1f5f9 6px,#f1f5f9 12px);border-radius:5px;padding:5px 7px;font-size:10px;line-height:1.25;opacity:.9;color:#64748b}
+.det-ghost .gname{font-weight:700;text-decoration:line-through;text-decoration-color:#cbd5e1}
+.det-ghost .gmeta{font-size:8.5px;margin-top:2px;font-weight:700;color:#94a3b8}
+
+</style>
+</head>
+<body>
+<div class="hdr">
+  <img src="assets/logo.jpg" alt="NTICS">
+  <div class="hdr-title">Escritório de <span>Projetos</span> : Planejamento 2026 · Detalhado v1</div>
+  <div class="hdr-meta">Atualizado: 29/05/2026<br><span style="color:var(--green);font-weight:600">PMO NTICS · v3</span></div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('anual',this)">📅 Visão Anual</div>
+  <div class="tab" onclick="switchTab('junho',this)">📋 Planejamento Junho</div>
+  <div class="tab" onclick="switchTab('recon',this)">🔗 Reconciliação ClickUp</div>
+</div>
+
+<div class="content">
+
+<!-- ===== ANUAL ===== -->
+<div class="panel active" id="panel-anual">
+  <div class="stats">
+    <div class="stat"><div class="stat-n">20</div><div class="stat-l">Projetos Ativos</div></div>
+    <div class="stat"><div class="stat-n">4</div><div class="stat-l">Previstos Nov</div></div>
+    <div class="stat"><div class="stat-n">7</div><div class="stat-l">Coordenadores</div></div>
+    <div class="stat"><div class="stat-n">6</div><div class="stat-l">Áreas Transversais</div></div>
+  </div>
+
+  <div class="legend">
+    <span class="leg-lbl">Fases:</span><div id="legend-items"></div>
+    <span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;margin-left:8px"><span class="leg-marco" style="background:#0d9488">KC</span>Kickoff Cliente</span><span style="display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;margin-left:8px"><span class="leg-marco">KI</span>Kickoff Interno (passagem de bastão)</span>
+  </div>
+
+  <div class="team-row" id="filter-row">
+    <span class="leg-lbl">Filtrar:</span>
+    <div class="tm" data-resp="lucas" onclick="filterResp('lucas',this)"><img class="av" src="assets/lucas.jpg"><span class="tm-name">Lucas</span></div>
+    <div class="tm" data-resp="bruna" onclick="filterResp('bruna',this)"><img class="av" src="assets/bruna.jpg"><span class="tm-name">Bruna</span></div>
+    <div class="tm" data-resp="jessica" onclick="filterResp('jessica',this)"><img class="av" src="assets/jessica.jpg"><span class="tm-name">Jéssica</span></div>
+    <div class="tm" data-resp="raiza" onclick="filterResp('raiza',this)"><img class="av" src="assets/raiza.jpg"><span class="tm-name">Raíza</span></div>
+    <div class="tm" data-resp="bellmond" onclick="filterResp('bellmond',this)"><img class="av" src="assets/bellmond.jpg"><span class="tm-name">Bellmond</span></div>
+    <div class="tm" data-resp="abilio" onclick="filterResp('abilio',this)"><img class="av" src="assets/abilio.jpg"><span class="tm-name">Abílio</span></div>
+    <div class="tm" data-resp="jeferson" onclick="filterResp('jeferson',this)"><img class="av" src="assets/jeferson.jpg"><span class="tm-name">Jeferson</span></div>
+    <div class="tm-divider"></div>
+    <div class="tm transversal" data-resp="mayara" onclick="filterResp('mayara',this)"><img class="av" src="assets/mayara.jpg"><span class="tm-name">Mayara</span></div>
+    <div class="tm transversal" data-resp="ana" onclick="filterResp('ana',this)"><img class="av" src="assets/ana.jpg"><span class="tm-name">Ana</span></div>
+    <div class="tm transversal" data-resp="angelo" onclick="filterResp('angelo',this)"><img class="av" src="assets/angelo.jpg"><span class="tm-name">Angelo</span></div>
+    <div class="tm transversal" data-resp="vera" onclick="filterResp('vera',this)"><img class="av" src="assets/vera.jpg"><span class="tm-name">Vera</span></div>
+    <div class="tm transversal" data-resp="ariadne" onclick="filterResp('ariadne',this)"><img class="av" src="assets/ariadne.jpg"><span class="tm-name">Ariadne</span></div>
+    <div class="tm transversal" data-resp="fernando" onclick="filterResp('fernando',this)"><img class="av" src="assets/fernando.jpg"><span class="tm-name">Fernando</span></div>
+    <span class="clr-btn" onclick="clearFilter()">✕ Limpar</span>
+  </div>
+
+  <div class="gantt-wrap">
+    <table class="gt" id="gantt">
+      <thead><tr>
+        <th class="th-proj">Projeto</th><th class="th-resp">Resp.</th>
+        <th class="th-m">Jan</th><th class="th-m">Fev</th><th class="th-m">Mar</th>
+        <th class="th-m">Abr</th><th class="th-m">Mai</th><th class="th-m th-cur">Jun</th>
+        <th class="th-m">Jul</th><th class="th-m">Ago</th><th class="th-m">Set</th>
+        <th class="th-m">Out</th><th class="th-m">Nov</th><th class="th-m">Dez</th>
+      </tr></thead>
+      <tbody id="gantt-body"></tbody>
+    </table>
+  </div>
+
+  <div class="fnote">
+    ⚠️ <strong>Projetos previstos para novembro (*)</strong>: Circo no Brasil 2ED (TCP), CODS (Vestas), ODS Cultural (Vivix) e Wilson &amp; Sons — Teatro ODS. Condicionados à confirmação de pagamentos pelos patrocinadores até agosto/2026.
+  </div>
+  <div class="inote" style="margin-top:12px">
+    📌 <strong>Marcos do projeto:</strong> <strong style="color:#0d9488">KC (Kickoff Cliente)</strong> = reunião formal de abertura com o patrocinador/cliente, marca o início oficial do projeto. <strong style="color:#7c3aed">KI (Kickoff Interno)</strong> = passagem de bastão PMO → Produção, quando o planejamento está 100% definido. Ambos são eventos pontuais (não fases) e aparecem como ícones na transição entre Mockup/T.Abertura e Engajamento.
+  </div>
+</div>
+
+<!-- ===== JUNHO ===== -->
+<div class="panel" id="panel-junho">
+  <div class="sec-hdr">
+    <h2>Planejamento — Junho 2026</h2>
+    <div class="sec-bar"></div>
+    <div class="sec-badge" id="jun-badge">— projetos</div>
+  </div>
+
+  <div class="subviews">
+    <div class="subview-btn active" onclick="switchSub('macro',this)">Por Coordenador</div>
+    <div class="subview-btn" onclick="switchSub('area',this)">Por Área / Setor</div>
+    <div class="subview-btn" onclick="switchSub('semanas',this)">Detalhado / Semanas</div>
+    <div class="subview-btn" onclick="switchSub('calendario',this)">🗓️ Calendário</div>
+    <div class="subview-btn" onclick="switchSub('handson',this)">🤝 Hands On</div>
+  </div>
+
+  <div class="legend" style="margin-bottom:14px"><span class="leg-lbl">Fases:</span><div id="legend-jun"></div></div>
+
+  <div class="team-row" id="filter-jun">
+    <span class="leg-lbl">Filtrar:</span>
+    <div class="tm" data-resp="lucas" onclick="filterJun('lucas',this)"><img class="av" src="assets/lucas.jpg"><span class="tm-name">Lucas</span></div>
+    <div class="tm" data-resp="bruna" onclick="filterJun('bruna',this)"><img class="av" src="assets/bruna.jpg"><span class="tm-name">Bruna</span></div>
+    <div class="tm" data-resp="jessica" onclick="filterJun('jessica',this)"><img class="av" src="assets/jessica.jpg"><span class="tm-name">Jéssica</span></div>
+    <div class="tm" data-resp="raiza" onclick="filterJun('raiza',this)"><img class="av" src="assets/raiza.jpg"><span class="tm-name">Raíza</span></div>
+    <div class="tm" data-resp="bellmond" onclick="filterJun('bellmond',this)"><img class="av" src="assets/bellmond.jpg"><span class="tm-name">Bellmond</span></div>
+    <div class="tm" data-resp="abilio" onclick="filterJun('abilio',this)"><img class="av" src="assets/abilio.jpg"><span class="tm-name">Abílio</span></div>
+    <div class="tm" data-resp="jeferson" onclick="filterJun('jeferson',this)"><img class="av" src="assets/jeferson.jpg"><span class="tm-name">Jeferson</span></div>
+    <div class="tm-divider"></div>
+    <div class="tm transversal" data-resp="mayara" onclick="filterJun('mayara',this)"><img class="av" src="assets/mayara.jpg"><span class="tm-name">Mayara</span></div>
+    <div class="tm transversal" data-resp="ana" onclick="filterJun('ana',this)"><img class="av" src="assets/ana.jpg"><span class="tm-name">Ana</span></div>
+    <div class="tm transversal" data-resp="angelo" onclick="filterJun('angelo',this)"><img class="av" src="assets/angelo.jpg"><span class="tm-name">Angelo</span></div>
+    <div class="tm transversal" data-resp="vera" onclick="filterJun('vera',this)"><img class="av" src="assets/vera.jpg"><span class="tm-name">Vera</span></div>
+    <div class="tm transversal" data-resp="ariadne" onclick="filterJun('ariadne',this)"><img class="av" src="assets/ariadne.jpg"><span class="tm-name">Ariadne</span></div>
+    <div class="tm transversal" data-resp="fernando" onclick="filterJun('fernando',this)"><img class="av" src="assets/fernando.jpg"><span class="tm-name">Fernando</span></div>
+    <span class="clr-btn" onclick="clearJunFilter()">✕ Limpar</span>
+  </div>
+
+  <div class="subview-panel active" id="sub-macro"></div>
+  <div class="subview-panel" id="sub-area"></div>
+  <div class="subview-panel" id="sub-semanas">
+    <div style="margin-bottom:12px;font-size:12px;color:var(--gray)">
+      <strong>Detalhado por semana, Junho/2026 (v1, Plano B):</strong> tarefas-mãe a fazer (abertas), o vivo do ClickUp comparado contra o baseline congelado. Atrasada mede contra hoje; escorregou mede contra o plano. Execução de campo fica no Calendário.
+    </div>
+    <div id="semanas-content"></div>
+  </div>
+  <div class="subview-panel" id="sub-calendario">
+    <div class="cal-legend" id="cal-legend"></div>
+    <div class="cal-legend" style="margin-top:-8px">
+      <div class="cal-leg"><span class="ce-capt" style="font-size:9px">📷 Captação</span> registro foto/vídeo (só quando há etiqueta)</div>
+      <div class="cal-leg"><span class="ce-ntics" style="font-size:9px">👤 NTICS em campo</span> presença NTICS (só quando há etiqueta)</div>
+      <div class="cal-leg" style="color:var(--gray);font-weight:500">Cor = projeto · execução é implícita (todo card é uma ação em campo)</div>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <div class="fnote" style="margin-top:16px">
+      🗓️ <strong>Espelho do ClickUp · ações de campo em jun/26.</strong> Eventos puxados das tasks com a etiqueta <strong>📍execução</strong>. A cor identifica o projeto e o topo mostra número, foto do responsável e patrocinador. <strong>Captação</strong> e <strong>NTICS em campo</strong> são camadas independentes: aparecem só quando a etiqueta existe na tarefa (ausência é informação válida, não falta de preenchimento).
+    </div>
+  </div>
+
+  <div class="subview-panel" id="sub-handson">
+    <div class="ho-intro">
+      <strong>Hands On de Junho.</strong> Cada semana, a <strong>Clareza da Semana</strong> é gerada à parte (skill <em>norteador-semana</em>) e usada na reunião.
+      Depois da reunião, ela é arquivada aqui como <strong>snapshot completo</strong> (estrutura integral, não resumo). A semana corrente fica marcada como
+      <span class="ho-chip-atual-inline">ATUAL</span>; as anteriores ficam congeladas. <span id="handson-badge" style="color:var(--gray)"></span>
+    </div>
+
+    <div class="ho-strip" id="ho-strip"></div>
+
+    <div class="ho-viewer">
+      <div class="ho-viewer-bar" id="ho-viewer-bar"></div>
+      <div class="ho-frame-wrap" id="ho-frame-wrap"></div>
+    </div>
+
+    <div class="fnote" style="margin-top:16px">
+      🗂️ <strong>Arquivo por referência, escopo do mês.</strong> Este histórico guarda as semanas <strong>de junho</strong>; ao virar o mês, o arquivo do mês seguinte começa zerado. Cada semana abre o HTML standalone da Clareza em página própria (em tela cheia), mantido fora do painel para não pesar o mensal.
+      Para arquivar uma semana: gere a Clareza, salve o arquivo na mesma pasta e preencha o campo <code>file</code> da semana em <code>HANDSON_WEEKS</code>. Slots sem arquivo aparecem como <strong>VAZIA</strong> até receberem o HTML.
+    </div>
+  </div>
+</div>
+
+<!-- ===== RECONCILIAÇÃO ===== -->
+<div class="panel" id="panel-recon">
+  <div class="sec-hdr">
+    <h2>Reconciliação com ClickUp · Fase 1.5</h2>
+    <div class="sec-bar"></div>
+    <div class="sec-badge" style="background:#f59e0b">Em andamento</div>
+  </div>
+
+  <div class="recon-intro">
+    <h3>Direção da informação — onde estamos</h3>
+    <div class="recon-phase done">
+      <div class="recon-num">1</div>
+      <div class="recon-txt"><strong>Planejamento curado.</strong> Este artefato é o gabarito. 7 fases lineares + 1 marco (Kickoff Interno). 13 pessoas (7 coordenadores + 6 transversais). Mayara oficializada como coord do 124. <span class="badge-now">CONCLUÍDO</span></div>
+    </div>
+    <div class="recon-phase done">
+      <div class="recon-num">2</div>
+      <div class="recon-txt"><strong>Diagnóstico Fase 1.5.</strong> Auditoria de 16 listas-projeto contra o gabarito. Relatório gerado em 28/05. ~545 tarefas órfãs, 5 divergências de coordenação, 93 tarefas vencidas. <span class="badge-now">CONCLUÍDO</span></div>
+    </div>
+    <div class="recon-phase">
+      <div class="recon-num">3</div>
+      <div class="recon-txt"><strong>Plano de ajustes no ClickUp.</strong> Lista priorizada de ações para sanear o ClickUp e alinhá-lo ao gabarito. Ver abaixo. <span class="badge-now">VOCÊ ESTÁ AQUI</span></div>
+    </div>
+    <div class="recon-phase future">
+      <div class="recon-num">4</div>
+      <div class="recon-txt"><strong>Regime — ClickUp como fonte da verdade.</strong> Com o ClickUp saneado, a direção se inverte: você atualiza o ClickUp e o planejamento se redesenha sozinho. <span class="badge-soon">aguardando saneamento</span></div>
+    </div>
+  </div>
+
+  <div class="recon-intro">
+    <h3>De-para de fases gabarito ↔ ClickUp (oficial)</h3>
+    <table class="depara-table">
+      <thead><tr><th>Fase Gabarito</th><th></th><th>Campo FASE no ClickUp</th><th>Observação</th></tr></thead>
+      <tbody>
+        <tr><td><span class="tag-pill" style="background:#ec4899">LAB</span></td><td class="depara-arrow">→</td><td>Lab NTICS</td><td>Incubação interna</td></tr>
+        <tr><td><span class="tag-pill" style="background:#1e3a8a">MOCKUP / T.ABERTURA</span></td><td class="depara-arrow">→</td><td>Planejamento + Kick-off</td><td>Desenho da operação + formalização com cliente (unificados)</td></tr>
+        <tr><td><span style="display:inline-flex;align-items:center;gap:4px"><span class="leg-marco" style="background:#0d9488">KC</span> Kickoff Cliente</span></td><td class="depara-arrow">→</td><td><em>(marco — não é fase)</em></td><td>Reunião formal de abertura com patrocinador · sugestão: criar etiqueta <code>kickoff-cliente</code></td></tr>
+        <tr><td><span style="display:inline-flex;align-items:center;gap:4px"><span class="leg-marco">KI</span> Kickoff Interno</span></td><td class="depara-arrow">→</td><td><em>(marco — não é fase)</em></td><td>Passagem PMO → Produção · sugestão: criar etiqueta <code>kickoff-interno</code></td></tr>
+        <tr><td><span class="tag-pill" style="background:#0ea5e9">ENGAJAMENTO</span></td><td class="depara-arrow">→</td><td>Pré-Execução</td><td>Mobilização de público/parceiros</td></tr>
+        <tr><td><span class="tag-pill" style="background:#eab308">PRÉ-PRODUÇÃO</span></td><td class="depara-arrow">→</td><td>Prep.Op.Orç</td><td>Preparação operacional/orçamentária</td></tr>
+        <tr><td><span class="tag-pill" style="background:#22c55e">EXECUÇÃO</span></td><td class="depara-arrow">→</td><td>Execução</td><td>Direto</td></tr>
+        <tr><td><span class="tag-pill" style="background:#dc2626">FINALIZAÇÃO</span></td><td class="depara-arrow">→</td><td>Fechamento</td><td>Direto</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="recon-intro">
+    <h3>Plano de ajustes no ClickUp — ordenado por prioridade</h3>
+    <p style="margin-bottom:12px;font-size:12px;color:var(--gray)">Confrontado com o relatório de diagnóstico de 28/05. <strong>Princípio:</strong> ajustar o ClickUp para que ele se torne capaz de gerar o planejamento sozinho — não o contrário. Cada item identifica se é problema de <em>tag</em>, <em>fase</em>, <em>nomenclatura</em>, <em>responsável</em> ou <em>estrutura</em>.</p>
+    <div id="plano-ajustes"></div>
+  </div>
+</div>
+
+</div><!-- /content -->
+<script src="dados/junho.js"></script>
+<script>
+const IMGS = {
+  lucas: "assets/lucas.jpg",
+  bruna: "assets/bruna.jpg",
+  jessica: "assets/jessica.jpg",
+  raiza: "assets/raiza.jpg",
+  bellmond: "assets/bellmond.jpg",
+  abilio: "assets/abilio.jpg",
+  jeferson: "assets/jeferson.jpg",
+  mayara: "assets/mayara.jpg",
+  angelo: "assets/angelo.jpg",
+  vera: "assets/vera.jpg",
+  ariadne: "assets/ariadne.jpg",
+  fernando: "assets/fernando.jpg",
+  ana: "assets/ana.jpg",
+  logo: "assets/logo.jpg"
+};
+const PHASE = {
+  lab: {label:"LAB", color:"#ec4899", order:1},
+  mockup: {label:"MOCKUP / T.ABERTURA", color:"#1e3a8a", order:2},
+  engajamento: {label:"ENGAJAMENTO", color:"#0ea5e9", order:3},
+  preprod: {label:"PRÉ-PRODUÇÃO", color:"#eab308", order:4},
+  execucao: {label:"EXECUÇÃO", color:"#22c55e", order:5},
+  finalizacao: {label:"FINALIZAÇÃO", color:"#dc2626", order:6},
+  prepontual: {label:"PRÉ-PROD (PONTUAL)", color:"#f59e0b", order:7},
+  previsto: {label:"PREVISTO*", color:"#9ca3af", order:99}
+};
+const PROJECTS = [{"id": "74", "name": "Global Goals Educa", "client": "Áster", "resp": "lucas", "months": [[{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "finalizacao"}]], "involved": ["lucas", "abilio"]}, {"id": "126", "name": "Ecoarte Container nas Escolas", "client": "GRU Airport", "resp": "jessica", "months": [[], [], [], [{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [], [{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [{"p": "engajamento"}, {"p": "preprod"}], [{"p": "preprod"}], [{"p": "execucao"}], [{"p": "finalizacao"}], [], []], "involved": ["jessica", "abilio", "lucas"]}, {"id": "125", "name": "Exposição Gastronomia 2ED", "client": "GRU Airport", "resp": "jessica", "months": [[{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [{"p": "engajamento"}], [{"p": "preprod"}], [{"p": "preprod"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}, {"p": "finalizacao"}], [], [], [], [], []], "involved": ["jessica", "abilio", "lucas"]}, {"id": "127a", "name": "PIE Empreendedorismo 2ED", "client": "GRU Airport", "resp": "jessica", "months": [[{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [{"p": "engajamento"}], [{"p": "preprod"}], [{"p": "preprod"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}, {"p": "finalizacao"}], [], [], [], [], []], "involved": ["jessica", "abilio", "lucas"]}, {"id": "127b", "name": "PIE Empreendedorismo 2ED", "client": "SOTREQ", "resp": "jessica", "months": [[{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [{"p": "engajamento"}], [{"p": "preprod"}], [{"p": "preprod"}], [{"p": "preprod"}], [{"p": "preprod"}, {"p": "execucao"}], [{"p": "engajamento"}], [{"p": "execucao"}], [{"p": "execucao"}, {"p": "finalizacao"}], [], [], []], "involved": ["jessica", "abilio", "lucas"]}, {"id": "124", "name": "Exposição Gastronomia", "client": "Compangás", "resp": "mayara", "months": [[], [{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [{"p": "engajamento"}], [{"p": "preprod"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}, {"p": "finalizacao"}], [], [], [], [], []], "involved": ["lucas", "abilio", "mayara"]}, {"id": "120a", "name": "Negócio Cultural 2ED", "client": "Porto Itapoá", "resp": "abilio", "months": [[{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [{"p": "engajamento"}], [{"p": "engajamento"}, {"p": "preprod"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "finalizacao"}], [], [], [], [], []], "involved": ["abilio", "lucas"]}, {"id": "120b", "name": "Negócio Cultural 2ED", "client": "Statkraft", "resp": "jessica", "months": [[{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [{"p": "engajamento"}], [{"p": "engajamento"}, {"p": "preprod"}], [{"p": "engajamento"}, {"p": "preprod"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}, {"p": "finalizacao"}], [], [], [], [], []], "month_guests": {}, "involved": ["jessica", "abilio", "lucas"]}, {"id": "121", "name": "Negócio Cultural 3ED", "client": "TAG", "resp": "jessica", "months": [[], [], [], [], [], [{"p": "engajamento"}], [{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [{"p": "engajamento", "who": "jeferson"}], [{"p": "execucao", "who": "jeferson"}], [{"p": "execucao", "who": "jeferson"}], [{"p": "finalizacao"}], []], "involved": ["jessica", "lucas", "jeferson", "abilio"]}, {"id": "119", "name": "PEC Eu Faço Parte", "client": "Sylvamo", "resp": "raiza", "months": [[{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [{"p": "engajamento"}], [{"p": "engajamento"}, {"p": "preprod"}], [{"p": "engajamento"}, {"p": "preprod"}], [{"p": "execucao"}], [{"p": "finalizacao"}], [], [], [], [], [], []], "involved": ["lucas", "raiza", "abilio"]}, {"id": "116", "name": "Cultura Robótica", "client": "Áster", "resp": "raiza", "months": [[{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [{"p": "engajamento"}, {"p": "preprod"}], [{"p": "engajamento"}, {"p": "preprod"}], [{"p": "engajamento"}, {"p": "preprod"}], [{"p": "execucao"}], [{"p": "finalizacao"}], [], [], [], [], [], []], "involved": ["lucas", "raiza", "abilio"]}, {"id": "117", "name": "Teatro e Oficina Robótica 4ED", "client": "Whirlpool", "resp": "raiza", "months": [[{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [{"p": "engajamento"}, {"p": "preprod"}], [{"p": "engajamento"}, {"p": "preprod"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "finalizacao"}], [], [], [], [], [], []], "involved": ["lucas", "raiza", "abilio"]}, {"id": "115", "name": "Cultura Robótica 2ED", "client": "Peróxidos / BTG / Tupy", "resp": "raiza", "months": [[], [], [], [], [], [{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [{"p": "engajamento", "who": "jeferson"}, {"p": "preprod"}], [{"p": "engajamento", "who": "jeferson"}], [{"p": "prepontual"}], [{"p": "execucao"}], [{"p": "finalizacao"}], []], "involved": ["raiza", "lucas", "jeferson", "abilio"]}, {"id": "133a", "name": "Ecoarte Container — Manaus", "client": "Vibra", "resp": "bellmond", "months": [[], [], [], [{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [{"p": "engajamento", "who": "jeferson"}, {"p": "preprod"}], [{"p": "engajamento", "who": "jeferson"}, {"p": "preprod"}, {"p": "execucao"}, {"p": "finalizacao"}], [], [], [], [], [], []], "involved": ["abilio", "lucas", "jeferson", "bellmond"]}, {"id": "133b", "name": "Ecoarte Container — Rio de Janeiro", "client": "Vibra", "resp": "bellmond", "months": [[], [], [], [], [], [{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}, {"p": "engajamento", "who": "jeferson"}], [{"p": "engajamento", "who": "jeferson"}, {"p": "preprod"}], [{"p": "engajamento", "who": "jeferson"}, {"p": "preprod"}, {"p": "execucao"}], [{"p": "finalizacao"}], [], [], []], "involved": ["abilio", "lucas", "jeferson", "bellmond"]}, {"id": "122+118", "name": "Cultura Itinerante ODS + ODS Cultural", "client": "Repsol + Wilson & Sons", "resp": "bellmond", "months": [[], [], [], [], [{"p": "engajamento", "who": "jeferson"}], [{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}, {"p": "engajamento", "who": "jeferson"}], [{"p": "engajamento", "who": "jeferson"}, {"p": "preprod"}], [{"p": "engajamento", "who": "jeferson"}, {"p": "preprod"}, {"p": "execucao"}], [{"p": "engajamento", "who": "jeferson"}, {"p": "execucao"}], [{"p": "finalizacao"}], [], []], "involved": ["abilio", "lucas", "jeferson", "bellmond"]}, {"id": "128", "name": "Festival Agricultura Sustentável", "client": "CNH", "resp": "lucas", "months": [[], [], [], [], [{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [{"p": "engajamento"}], [{"p": "preprod"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "finalizacao"}], []], "involved": ["lucas", "abilio"]}, {"id": "129", "name": "Agrofuturo Cultural nas Escolas", "client": "CNH", "resp": "lucas", "months": [[], [], [], [], [{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [{"p": "engajamento"}], [{"p": "preprod"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "finalizacao"}], []], "involved": ["lucas", "abilio"]}, {"id": "132", "name": "Estação Samarco", "client": "Samarco", "resp": "lucas", "months": [[], [], [], [{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}], [{"p": "engajamento"}], [{"p": "engajamento"}, {"p": "execucao"}], [{"p": "engajamento"}, {"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}], [{"p": "execucao"}, {"p": "finalizacao"}], []], "involved": ["lucas", "abilio"]}, {"id": "CGA", "name": "Festival Cinegastroarte", "client": "Áster", "resp": "lucas", "months": [[], [], [], [], [], [], [{"p": "mockup", "who": "abilio"}, {"p": "mockup", "who": "lucas"}, {"p": "engajamento"}, {"p": "preprod"}], [{"p": "engajamento"}, {"p": "preprod"}], [{"p": "preprod"}, {"p": "execucao"}], [{"p": "finalizacao"}], [], []], "involved": ["lucas", "abilio"]}, {"id": "123", "name": "Circo no Brasil 2ED", "client": "TCP", "resp": null, "previsto": true, "months": [[], [], [], [], [], [], [], [], [], [], [{"p": "previsto"}], []], "involved": []}, {"id": "130", "name": "CODS", "client": "Vestas", "resp": null, "previsto": true, "months": [[], [], [], [], [], [], [], [], [], [], [{"p": "previsto"}], []], "involved": []}, {"id": "131", "name": "ODS Cultural", "client": "Vivix", "resp": null, "previsto": true, "months": [[], [], [], [], [], [], [], [], [], [], [{"p": "previsto"}], []], "involved": []}, {"id": "WS", "name": "Teatro ODS", "client": "Wilson & Sons", "resp": null, "previsto": true, "months": [[], [], [], [], [], [], [], [], [], [], [{"p": "previsto"}], []], "involved": []}];
+const CAL_EVENTS = [{"day": 1, "name": "UIBAÍ | DIVULGAÇÃO OFICINA | Feira", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": false}, {"day": 1, "name": "UIBAÍ | OFICINAS NA ESCOLA | Esc. Mun. Gildécio Pereira", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": false}, {"day": 1, "name": "Assoc. Idosos Céu Azul | Hospitalidade | Gabriel Godoi", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": true}, {"day": 1, "name": "CEJU | WORKSHOP DE FOTOGRAFIA | 40 alunos", "who": "mayara", "proj": "124. Exposição Gastronomia (Compangás)", "exec": true, "capt": false}, {"day": 1, "name": "CEJU | WORKSHOP DE FOTOGRAFIA | 40 alunos", "who": "mayara", "proj": "124. Exposição Gastronomia (Compangás)", "exec": true, "capt": false}, {"day": 2, "name": "UIBAÍ | OFICINAS NA ESCOLA | Esc. Mun. Dom Pedro II", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": false}, {"day": 2, "name": "CEJU | WORKSHOP DE FOTOGRAFIA | 40 alunos", "who": "mayara", "proj": "124. Exposição Gastronomia (Compangás)", "exec": true, "capt": false}, {"day": 2, "name": "E.E. WALTER FUSCO | PALESTRAS E ATIVIDADES", "who": "jessica", "proj": "127. PIE Empreendedorismo 2ED", "exec": true, "capt": false}, {"day": 2, "name": "E.E. PEI CIDADE SOIMCO II | PALESTRAS E ATIVIDADES", "who": "jessica", "proj": "127. PIE Empreendedorismo 2ED", "exec": true, "capt": false}, {"day": 3, "name": "Guatapará/SP", "who": "raiza", "proj": "119. PEC Eu Faço Parte (Sylvamo)", "exec": true, "capt": false}, {"day": 3, "name": "IBIPEBA | OFICINAS NA ESCOLA | Escola Estadual", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": false}, {"day": 3, "name": "UIBAÍ | OFICINAS NA ESCOLA | Col. Estadual Manoel Levi", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": false}, {"day": 3, "name": "CEJU | AULA SHOW: CULINÁRIA SUSTENTÁVEL | 30 alunos", "who": "mayara", "proj": "124. Exposição Gastronomia (Compangás)", "exec": true, "capt": false}, {"day": 3, "name": "ACM CUMBICA | OFICINA CULINÁRIA | 100 alunos", "who": "jessica", "proj": "125. Exposição Gastronomia 2ED", "exec": true, "capt": false}, {"day": 3, "name": "E.E. PEI CIDADE SOIMCO II | PALESTRAS E ATIVIDADES", "who": "jessica", "proj": "127. PIE Empreendedorismo 2ED", "exec": true, "capt": false}, {"day": 6, "name": "E. SOINCO II | OFICINA CULINÁRIA | 250 alunos", "who": "jessica", "proj": "125. Exposição Gastronomia 2ED", "exec": true, "capt": false}, {"day": 8, "name": "UIBAÍ | OFICINAS NA ESCOLA | Esc. Mun. Valtenci Rocha", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": true}, {"day": 8, "name": "Casa da Cultura | Módulo Marketing Digital | Jéssica Lima", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": false}, {"day": 8, "name": "E.E. MILTON CERNACH | PALESTRAS E ATIVIDADES", "who": "jessica", "proj": "127. PIE Empreendedorismo 2ED", "exec": true, "capt": false}, {"day": 9, "name": "Casa da Cultura | Módulo Imagem Profissional | Rejane", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": true}, {"day": 9, "name": "Porto Itapoá / Itapoá /SC", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": false}, {"day": 9, "name": "E.E. MILTON CERNACH | PALESTRAS E ATIVIDADES", "who": "jessica", "proj": "127. PIE Empreendedorismo 2ED", "exec": true, "capt": false}, {"day": 10, "name": "IBIPEBA | OFICINAS NA ESCOLA | Escola Estadual", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": false}, {"day": 10, "name": "UIBAÍ | OFICINA NA COMUNIDADE | AMAFU", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": false}, {"day": 10, "name": "UIBAÍ | OFICINAS NA ESCOLA | Col. Estadual Manoel Levi", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": false}, {"day": 10, "name": "CEJU | AULA SHOW: CULINÁRIA SUSTENTÁVEL | 30 alunos", "who": "mayara", "proj": "124. Exposição Gastronomia (Compangás)", "exec": true, "capt": false}, {"day": 10, "name": "ACM CUMBICA | OFICINA CULINÁRIA | 100 alunos", "who": "jessica", "proj": "125. Exposição Gastronomia 2ED", "exec": true, "capt": false}, {"day": 11, "name": "IBIPEBA | OFICINAS NA ESCOLA | Escola Estadual", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": false}, {"day": 11, "name": "UIBAÍ | OFICINA NA COMUNIDADE | Secretaria/CrediBahia", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": true}, {"day": 11, "name": "UIBAÍ | OFICINAS NA ESCOLA | Col. Estadual Manoel Levi", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": false}, {"day": 11, "name": "E.E. MILTON CERNACH | PALESTRAS E ATIVIDADES", "who": "jessica", "proj": "127. PIE Empreendedorismo 2ED", "exec": true, "capt": false}, {"day": 12, "name": "IBIPEBA | OFICINAS NA ESCOLA | Escola Estadual", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": false}, {"day": 12, "name": "UIBAÍ | OFICINAS NA ESCOLA | Col. Estadual Manoel Levi", "who": "bruna", "proj": "120. Negócio Cultural 2ED", "exec": true, "capt": false}, {"day": 17, "name": "ACM CUMBICA | OFICINA CULINÁRIA | 100 alunos", "who": "jessica", "proj": "125. Exposição Gastronomia 2ED", "exec": true, "capt": false}, {"day": 19, "name": "VISITA ALUNOS VENCEDORES ROBÓTICA WHIRLPOOL - JOINVILLE", "who": "raiza", "proj": "117. Teatro e Oficina Robótica 4ED (Whirlpool)", "exec": true, "capt": false}, {"day": 24, "name": "ACM CUMBICA | OFICINA CULINÁRIA | 100 alunos", "who": "jessica", "proj": "125. Exposição Gastronomia 2ED", "exec": true, "capt": false}, {"day": 26, "name": "TRANSMISSÃO AO VIVO | PALESTRA VIRTUAL | 30 profs", "who": "mayara", "proj": "124. Exposição Gastronomia (Compangás)", "exec": true, "capt": false}, {"day": 26, "name": "E.E. WALTER FUSCO | PALESTRAS E ATIVIDADES", "who": "jessica", "proj": "127. PIE Empreendedorismo 2ED", "exec": true, "capt": false}, {"day": 27, "name": "CEJU | EXPOSIÇÃO CULINÁRIA | 1.000 alunos", "who": "mayara", "proj": "124. Exposição Gastronomia (Compangás)", "exec": true, "capt": false}];
+const AREAS = {"auditoria": {"name": "Auditoria", "who": "mayara", "projects_audited": ["115", "117", "124", "132", "133"], "total": 25, "highlights": [["Coord. operacional 124 Compagás", "20 tasks no CEJU + relatórios + briefings vídeo"], ["Auditoria MINC 115 Robótica 2ED", "Conferir entregas MINC + aprovar releases"], ["Auditoria MINC 117 Whirlpool", "Aprovar entregáveis para fechamento"], ["Auditoria MINC 132 Samarco", "Aprovar entregáveis para fechamento"], ["Auditoria 133 Vibra", "Conferir entregas MINC e democratização"], ["🔁 Dia 5 e Dia 18", "Pedidos de compra mensais"]]}, "assessoria": {"name": "Assessoria de Imprensa", "who": "angelo", "projects_audited": ["115", "116", "119", "120", "124", "127", "132", "133"], "total": 24, "highlights": [["Início Divulgação — pré-projeto", "115 · 120 · 127 · 132 · 133"], ["Criação plano de Divulgação PPT + release", "115 BTG/Tupy/Peróxidos"], ["Criação relatório de clipping (Modelo NTICS)", "116 · 119 · 120"], ["Divulgação durante ação + resultados", "119 · 120 · 124"], ["Envio relatórios para patrocinador", "119 · 120 · 124"], ["Reunião apresentação Plano (115)", "Prioridade ALTA"]]}, "lab": {"name": "Lab / Pesquisa de Proposta", "who": "ana", "projects_audited": ["122"], "total": 1, "highlights": [["Estruturar Proposta 122 Repsol", "Atualizar PPT com inputs e melhorias — vence 04/jun"], ["— Aguardando ramp-up Fase 2/3", "CNH 128 e 129 sem alocação Ana este mês"]]}, "cnh": {"name": "Frente CNH (Concessionárias)", "who": "fernando", "projects_audited": ["133"], "total": 1, "highlights": [["Produzir Relatórios Parciais", "133 Vibra — toda sexta, com Impacto + Melhores Momentos"], ["— Carga leve em jun", "CNH 128/129 entram em pré-prod a partir de jul"]]}, "financeiro": {"name": "Financeiro", "who": "vera", "projects_audited": [], "total": 47, "highlights": [["Pagamentos dia 30", "Conciliação + DRE maio + Fechamento contábil"], ["Contas a Receber — Parcelas + NFs", "Emitir NF, baixar recebimentos, alocar % captação"], ["Auditoria mensal connect + budget", "Em conjunto com Ana C. Xavier e Luiz Felipe"], ["Renovação E-CPF Eloyna", "Vence 10/jun — prioridade"], ["CEPE Basquete + Escolinha", "Contas a Receber — pagamento aguardando"], ["Definição rúbricas + envio pedidos dia 20", "Compras + budget"]]}, "compras": {"name": "Compras", "who": "ariadne", "projects_audited": [], "total": 43, "highlights": [["🔁 Ciclo dia 5 e dia 20", "Emissão pedidos · cobrança fornecedores · baixas connect use"], ["Conferência saldos Previsto × Realizado", "Por projeto"], ["Gestão de contratos", "Acompanhar assinaturas zapsing · cobrar pendências"], ["Cadastro de fornecedores", "Verificar cadastro · envio contratos"], ["Relatório Flaptur", "Pagto dia 5 e dia 20"], ["Fechamento contábil mensal", "NFs fora SP · emissão NFTS"]]}};
+
+const COORD_NAMES = {lucas:'Lucas',bruna:'Bruna',jessica:'Jéssica',raiza:'Raíza',bellmond:'Bellmond',abilio:'Abílio',jeferson:'Jeferson',mayara:'Mayara',ana:'Ana',angelo:'Angelo',vera:'Vera',ariadne:'Ariadne',fernando:'Fernando'};
+const COORD_ORDER = ['lucas','jessica','raiza','bellmond','abilio','jeferson','mayara'];
+const TRANSVERSAL = ['ana','angelo','vera','ariadne','fernando'];
+const JUN = 5;
+
+// ── LEGEND ──
+function buildLegend(id){
+  const c=document.getElementById(id); if(!c) return;
+  c.innerHTML='';
+  const w=document.createElement('div'); w.style.cssText='display:flex;gap:10px;flex-wrap:wrap';
+  Object.entries(PHASE).sort((a,b)=>a[1].order-b[1].order).forEach(([k,v])=>{
+    if(k==='previsto') return;
+    const d=document.createElement('div'); d.className='leg-item';
+    if(k==='prepontual'){
+      d.innerHTML=`<div class="leg-dot" style="background:#fffbeb;border:1.5px dashed ${v.color}"></div>${v.label} <span style="color:#9ca3af;font-size:10px">(ação curta, não o mês todo)</span>`;
+    } else {
+      d.innerHTML=`<div class="leg-dot" style="background:${v.color}"></div>${v.label}`;
+    }
+    w.appendChild(d);
+  });
+  c.appendChild(w);
+}
+
+// ── PHASE PERSON OVERRIDES (engajamento) ──
+// chave: projId|monthIdx|blockIdx  → valor: respKey ou '' (limpar)
+const whoOverrides = {};
+
+function whoKey(projId, mi, bi){ return `${projId}|${mi}|${bi}`; }
+
+function getBlockWho(p, b, mi, bi){
+  const k = whoKey(p.id, mi, bi);
+  if(whoOverrides[k] !== undefined) return whoOverrides[k]; // pode ser '' (limpo)
+  return b.who || '';
+}
+
+// ── PHASE BLOCK ──
+function phBlock(b, respKey, p, mi, bi){
+  const cfg = PHASE[b.p] || {label:b.p,color:'#9ca3af'};
+  const isP = b.p==='previsto';
+  const isEditable = (b.p==='engajamento' || b.p==='execucao');
+
+  // pré-pontual: ação curta, visual tracejado amarelo, não editável
+  if(b.p==='prepontual'){
+    let img='';
+    if(b.who && b.who!==respKey){
+      img=`<img src="${IMGS[b.who]||''}" alt="${b.who}" title="${COORD_NAMES[b.who]||b.who}">`;
+    }
+    return `<div class="ph-block ph-pontual" title="Ação pontual (não o mês todo)">${img}<span class="ph-lbl">${cfg.label}</span></div>`;
+  }
+
+  if(isEditable){
+    // engajamento e execução são editáveis: dropdown de pessoa
+    const who = getBlockWho(p, b, mi, bi);
+    const k = whoKey(p.id, mi, bi);
+    let avatar='';
+    if(who && who!==respKey){
+      avatar=`<span class="ph-who" id="phw-${k.replace(/\|/g,'-')}" onclick="togglePhWho('${k}',event)">
+        <img src="${IMGS[who]||''}" alt="${who}" title="${COORD_NAMES[who]||who} — clique para trocar">
+        ${buildPhWhoDrop(p, k, who)}
+      </span>`;
+    } else {
+      // sem pessoa específica (segue responsável): mostra ícone discreto editável
+      avatar=`<span class="ph-who" id="phw-${k.replace(/\|/g,'-')}" onclick="togglePhWho('${k}',event)">
+        <img src="${IMGS[respKey]||''}" alt="add" title="Atribuir pessoa — clique" style="opacity:.55">
+        ${buildPhWhoDrop(p, k, who)}
+      </span>`;
+    }
+    return `<div class="ph-block editable" style="background:${cfg.color}">${avatar}<span class="ph-lbl">${cfg.label}</span></div>`;
+  }
+
+  // demais fases: comportamento original
+  // mockup sempre mostra a foto do who (Abílio/Lucas fixos), mesmo se = responsável
+  let img='';
+  if(b.who){
+    const hide = (b.p!=='mockup' && b.who===respKey);
+    if(!hide) img=`<img src="${IMGS[b.who]||''}" alt="${b.who}" title="${COORD_NAMES[b.who]||b.who}">`;
+  }
+  return `<div class="ph-block${isP?' ph-previsto':''}" style="${isP?'':'background:'+cfg.color}">${img}<span class="ph-lbl">${cfg.label}</span></div>`;
+}
+
+function buildPhWhoDrop(p, k, cur){
+  const opts = COORD_ORDER.map(c=>{
+    const isCur = c===cur;
+    return `<div class="ph-who-opt${isCur?' current':''}" onclick="setPhWho('${k}','${c}',event)">
+      <img src="${IMGS[c]||''}" alt="${c}"><span>${COORD_NAMES[c]||c}</span>
+    </div>`;
+  }).join('');
+  const clear = `<div class="ph-who-opt clear-opt" onclick="setPhWho('${k}','',event)">↩ seguir responsável</div>`;
+  return `<span class="ph-who-drop">${opts}${clear}</span>`;
+}
+
+function togglePhWho(k, e){
+  e.stopPropagation();
+  const id = 'phw-'+k.replace(/\|/g,'-');
+  const el = document.getElementById(id);
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.ph-who.open, .resp-wrap.open').forEach(w=>w.classList.remove('open'));
+  const gw = document.querySelector('.gantt-wrap');
+  if(!isOpen){ el.classList.add('open'); if(gw) gw.classList.add('drop-open'); }
+  else { if(gw) gw.classList.remove('drop-open'); }
+}
+
+function setPhWho(k, who, e){
+  e.stopPropagation();
+  whoOverrides[k] = who;
+  document.querySelectorAll('.ph-who.open').forEach(w=>w.classList.remove('open'));
+  buildGantt();
+}
+
+// ── MARCOS: KC (Kickoff Cliente) + KI (Kickoff Interno) ──
+// KC: appears in the LAST month of Mockup/T.Abertura (client formalization)
+// KI: appears in the FIRST month of Engajamento (handover PMO→Production)
+function shouldShowKC(p, monthIdx){
+  const curr = p.months[monthIdx] || [];
+  const next = p.months[monthIdx+1] || [];
+  const currHasMockup = curr.some(b=>b.p==='mockup');
+  const nextNoMockup = !next.some(b=>b.p==='mockup');
+  const nextHasEngOrPreprod = next.some(b=>b.p==='engajamento'||b.p==='preprod'||b.p==='execucao');
+  return currHasMockup && nextNoMockup && nextHasEngOrPreprod;
+}
+function shouldShowKI(p, monthIdx){
+  if(monthIdx===0) return false;
+  const prev = p.months[monthIdx-1] || [];
+  const curr = p.months[monthIdx] || [];
+  const prevHasMockup = prev.some(b=>b.p==='mockup');
+  const currHasEngajamento = curr.some(b=>b.p==='engajamento');
+  return prevHasMockup && currHasEngajamento;
+}
+
+// ── GANTT SWAP STATE ──
+const respOverrides = {}; // {projId: newRespKey}
+
+function getRespKey(p){
+  return respOverrides[p.id] !== undefined ? respOverrides[p.id] : p.resp;
+}
+
+function buildRespDropdown(p){
+  const cur = getRespKey(p);
+  const isSwapped = respOverrides[p.id] && respOverrides[p.id] !== p.resp;
+  const opts = COORD_ORDER.map(c=>{
+    const isCur = c===cur;
+    return `<div class="resp-option${isCur?' current':''}" onclick="swapResp('${p.id}','${c}',event)">
+      <img src="${IMGS[c]||''}" alt="${c}">
+      <span>${COORD_NAMES[c]||c}${c===p.resp?' <span style=\"font-size:9px;color:#9ca3af\">(original)</span>':''}</span>
+    </div>`;
+  }).join('');
+  const badge = isSwapped ? `<span class="swap-badge" title="Responsável alterado">✎</span>` : '';
+  return `<div class="resp-wrap" id="rw-${p.id}" onclick="toggleRespDrop('${p.id}',event)">
+    <img src="${IMGS[cur]||''}" alt="${cur}" title="Clique para trocar responsável — ${COORD_NAMES[cur]||cur}">
+    ${badge}
+    <div class="resp-dropdown">${opts}</div>
+  </div>`;
+}
+
+function toggleRespDrop(projId, e){
+  e.stopPropagation();
+  const wrap = document.getElementById('rw-'+projId);
+  const isOpen = wrap.classList.contains('open');
+  document.querySelectorAll('.resp-wrap.open').forEach(w=>w.classList.remove('open'));
+  if(!isOpen) wrap.classList.add('open');
+}
+
+function swapResp(projId, newResp, e){
+  e.stopPropagation();
+  respOverrides[projId] = newResp;
+  document.querySelectorAll('.resp-wrap.open').forEach(w=>w.classList.remove('open'));
+  buildGantt();
+}
+
+document.addEventListener('click', ()=>{
+  document.querySelectorAll('.resp-wrap.open, .ph-who.open').forEach(w=>w.classList.remove('open'));
+  const gw = document.querySelector('.gantt-wrap'); if(gw) gw.classList.remove('drop-open');
+});
+
+// ── ORDENAÇÃO EM GRUPOS ──
+function mesFinalizacao(p){
+  for(let mi=0;mi<p.months.length;mi++){
+    if((p.months[mi]||[]).some(b=>b.p==='finalizacao')) return mi;
+  }
+  let last=-1;
+  p.months.forEach((blocks,mi)=>{ if(blocks&&blocks.length&&!blocks.some(b=>b.p==='previsto')) last=mi; });
+  return last;
+}
+function numProj(p){
+  const m=(''+p.id).match(/^(\d+)/);
+  return m?parseInt(m[1]):999;
+}
+function orderedGroups(){
+  const realizacao=[], previstos=[];
+  PROJECTS.forEach(p=>{
+    if(p.previsto){ previstos.push(p); return; }
+    realizacao.push(p);
+  });
+  // realização: por mês de finalização, desempate por nº do projeto
+  realizacao.sort((a,b)=>{
+    const fa=mesFinalizacao(a), fb=mesFinalizacao(b);
+    if(fa!==fb) return fa-fb;
+    return numProj(a)-numProj(b);
+  });
+  previstos.sort((a,b)=>numProj(a)-numProj(b));
+  return {realizacao, previstos};
+}
+
+function bandRow(title, count, cls){
+  const tr=document.createElement('tr');
+  tr.className='group-band '+cls;
+  tr.innerHTML=`<td colspan="14"><div class="band-inner"><span class="band-title">${title}</span><span class="band-count">${count} projeto${count!==1?'s':''}</span></div></td>`;
+  return tr;
+}
+
+function renderProjectRow(p){
+  const tr=document.createElement('tr');
+  tr.dataset.proj=p.id;
+  if(p.previsto) tr.classList.add('row-previsto');
+  const pName = p.previsto
+    ? `<span class="pid">#${p.id}</span> <span class="pname">${p.name} <span class="previsto-badge">*Previsto Nov</span></span><div class="pclient">${p.client}</div>`
+    : `<span class="pid">#${p.id}</span> <span class="pname">${p.name}</span><div class="pclient">${p.client}</div>`;
+  let h=`<td class="td-proj">${pName}</td>`;
+  h += p.previsto
+    ? `<td class="td-resp"><span style="font-size:10px;color:#9ca3af">—</span></td>`
+    : `<td class="td-resp">${buildRespDropdown(p)}</td>`;
+  const curResp = getRespKey(p);
+  const invSet = new Set([curResp]);
+  (p.involved||[]).forEach(x=>invSet.add(x));
+  p.months.forEach((blocks,mi)=>{
+    const ki = shouldShowKI(p, mi);
+    const kc = shouldShowKC(p, mi);
+    const marcosHtml = (kc ? '<div class="marco-kc" title="Kickoff Cliente">KC</div>' : '') + (ki ? '<div class="marco-ki" title="Kickoff Interno">KI</div>' : '');
+    if(!blocks||!blocks.length){
+      h += marcosHtml ? `<td><div class="month-cell">${marcosHtml}</div></td>` : '<td></td>';
+    } else {
+      blocks.forEach((b,bi)=>{ const w=getBlockWho(p,b,mi,bi); if(w) invSet.add(w); });
+      const inner = blocks.map((b,bi)=>phBlock(b,curResp,p,mi,bi)).join('');
+      h+=`<td><div class="month-cell">${marcosHtml}${inner}</div></td>`;
+    }
+  });
+  tr.dataset.involved = Array.from(invSet).join(',');
+  tr.innerHTML=h;
+  return tr;
+}
+
+// ── GANTT ──
+function buildGantt(){
+  const tb=document.getElementById('gantt-body'); tb.innerHTML='';
+  buildLegend('legend-items');
+  const {realizacao, previstos}=orderedGroups();
+
+  tb.appendChild(bandRow('Projetos em Realização', realizacao.length, 'band-realizacao'));
+  realizacao.forEach(p=>tb.appendChild(renderProjectRow(p)));
+
+  if(previstos.length){
+    tb.appendChild(bandRow('Aguardando · Previstos Novembro', previstos.length, 'band-previsto'));
+    previstos.forEach(p=>tb.appendChild(renderProjectRow(p)));
+  }
+
+  // reaplicar filtro ativo se houver
+  const active = document.querySelector('#filter-row .tm.on');
+  if(active) {
+    const name = active.dataset.name;
+    document.querySelectorAll('#gantt-body tr:not(.group-band)').forEach(tr=>{
+      const inv=(tr.dataset.involved||'').split(',');
+      const isPrev=tr.classList.contains('row-previsto');
+      tr.classList.toggle('hidden', !inv.includes(name) && !isPrev);
+    });
+  }
+}
+
+// ── JUNHO subviews ──
+function buildJunho(){
+  buildLegend('legend-jun');
+  const active = PROJECTS.filter(p=>p.months[JUN] && p.months[JUN].length && !p.previsto);
+  document.getElementById('jun-badge').textContent = active.length+' projetos ativos';
+  buildSubMacro(active);
+  buildSubArea();
+  buildSubSemanas(active);
+  buildCalendar();
+}
+
+// SUBVIEW 1 — coordinator (groups by involved)
+function buildSubMacro(active){
+  const groups={}; COORD_ORDER.forEach(c=>groups[c]=[]);
+  active.forEach(p=>{
+    const inv = new Set([p.resp]);
+    p.months[JUN].forEach(b=>{ if(b.who) inv.add(b.who); });
+    inv.forEach(person=>{ if(groups[person] && !groups[person].find(x=>x.id===p.id)) groups[person].push(p); });
+  });
+  const cont=document.getElementById('sub-macro'); cont.innerHTML='';
+  COORD_ORDER.forEach(coord=>{
+    const projs=groups[coord]; if(!projs.length) return;
+    const block=document.createElement('div'); block.className='coord-block'; block.dataset.coord=coord;
+    const rows=projs.map(p=>{
+      const blocks=p.months[JUN];
+      const ph=blocks.map(b=>{
+        const cfg=PHASE[b.p]||{label:b.p,color:'#9ca3af'};
+        const g=b.who&&b.who!==p.resp?`<img src="${IMGS[b.who]||''}" alt="${b.who}" style="width:16px;height:16px;border-radius:50%;object-fit:cover;margin-left:4px;border:1px solid rgba(255,255,255,.6)">`:'';
+        return `<span class="jun-ph" style="background:${cfg.color}">${cfg.label}${g}</span>`;
+      }).join(' ');
+      const guests=blocks.filter(b=>b.who&&b.who!==p.resp);
+      const isCoordGuest = guests.find(b=>b.who===coord);
+      const roleNote = (coord!==p.resp && isCoordGuest) ? '<span style="color:#7c3aed;font-weight:600;font-size:10px"> (atuação pontual)</span>' : '';
+      const gHtml=guests.length?guests.map(b=>`<span class="jun-guest"><img src="${IMGS[b.who]||''}" alt="${b.who}"> ${COORD_NAMES[b.who]||b.who}</span>`).join('  '):'<span style="color:#d1d5db">—</span>';
+      return `<tr><td><strong>#${p.id}</strong> ${p.name}${roleNote}<br><small style="color:#9ca3af">${p.client}</small></td><td>${ph}</td><td>${gHtml}</td></tr>`;
+    }).join('');
+    block.innerHTML=`<div class="coord-hdr"><img src="${IMGS[coord]}" alt="${coord}"><span class="cname">${COORD_NAMES[coord]}</span><span class="ccount">${projs.length} projeto(s)</span></div>
+      <table class="jun-table"><thead><tr><th style="min-width:220px">Projeto</th><th>Fase em Junho</th><th>Colaboração pontual</th></tr></thead><tbody>${rows}</tbody></table>`;
+    cont.appendChild(block);
+  });
+}
+
+// SUBVIEW 2 — by project (table)
+function buildSubProjeto(active){
+  const cont=document.getElementById('sub-projeto'); cont.innerHTML='';
+  const rows=active.map(p=>{
+    const blocks=p.months[JUN];
+    const team=new Set([p.resp]); blocks.forEach(b=>{if(b.who)team.add(b.who);});
+    const ph=blocks.map(b=>{
+      const cfg=PHASE[b.p]||{label:b.p,color:'#9ca3af'};
+      const g=b.who&&b.who!==p.resp?`<img src="${IMGS[b.who]||''}" alt="${b.who}" style="width:16px;height:16px;border-radius:50%;object-fit:cover;margin-left:4px;border:1px solid rgba(255,255,255,.6)">`:'';
+      return `<span class="jun-ph" style="background:${cfg.color}">${cfg.label}${g}</span>`;
+    }).join(' ');
+    const respImg = p.resp&&IMGS[p.resp]?`<span class="jun-guest"><img src="${IMGS[p.resp]}" alt="${p.resp}"> ${COORD_NAMES[p.resp]||p.resp}</span>`:'—';
+    const guests=blocks.filter(b=>b.who&&b.who!==p.resp);
+    const gHtml=guests.length?guests.map(b=>`<span class="jun-guest"><img src="${IMGS[b.who]||''}" alt="${b.who}"> ${COORD_NAMES[b.who]||b.who} <small style="color:#9ca3af">(${PHASE[b.p]?.label||b.p})</small></span>`).join('  '):'<span style="color:#d1d5db">—</span>';
+    return `<tr data-involved="${Array.from(team).join(',')}">
+      <td style="min-width:230px"><strong>#${p.id}</strong> ${p.name}<br><small style="color:#9ca3af">${p.client}</small></td>
+      <td>${ph}</td>
+      <td>${respImg}</td>
+      <td>${gHtml}</td>
+    </tr>`;
+  }).join('');
+  cont.innerHTML=`<table class="jun-table" id="proj-table">
+    <thead><tr><th style="min-width:230px">Projeto</th><th>Fase em Junho</th><th>Responsável</th><th>Colaboração pontual</th></tr></thead>
+    <tbody>${rows}</tbody></table>`;
+}
+
+// SUBVIEW 3 — by area/setor
+function buildSubArea(){
+  const cont=document.getElementById('sub-area'); cont.innerHTML='';
+  Object.entries(AREAS).forEach(([key,a])=>{
+    const block=document.createElement('div'); block.className='coord-block'; block.dataset.coord=a.who; block.dataset.area=key;
+    const projsLbl = a.projects_audited.length ? a.projects_audited.map(id=>`<span class="area-tag">#${id}</span>`).join('') : '<em style="color:#9ca3af">Sem projeto específico — atuação transversal</em>';
+    const hlHtml = a.highlights.map(([t,d])=>`<div class="area-hl-item"><div class="ahl-title">${t}</div><div class="ahl-detail">${d}</div></div>`).join('');
+    block.innerHTML=`
+      <div class="coord-hdr area-hdr">
+        <img src="${IMGS[a.who]}" alt="${a.who}">
+        <div>
+          <span class="cname">${a.name}</span>
+          <div class="crole">${COORD_NAMES[a.who]||a.who}</div>
+        </div>
+        <span class="ccount">${a.total} tasks em junho</span>
+      </div>
+      <div class="area-projects"><strong>Projetos envolvidos:</strong> ${projsLbl}</div>
+      <div class="area-hl-list">${hlHtml}</div>`;
+    cont.appendChild(block);
+  });
+  // Add small info note
+  const note=document.createElement('div');
+  note.className='inote'; note.style.marginTop='8px';
+  note.innerHTML='💡 <strong>Dados puxados do ClickUp em 29/05.</strong> Para a Mayara, mostra cobertura de auditoria MINC + coord operacional do 124. Para Vera/Ariadne, rotinas do space Financeiro & Controladoria. Para Angelo, tasks de assessoria nos projetos em execução.';
+  cont.appendChild(note);
+}
+
+// SUBVIEW 4 — weeks
+// ── DETALHADO / SEMANAS — matriz viva (dados reais ClickUp, folder 90115187061) ──
+// window.DET e window.BASELINE vêm de dados/junho.js (carregado antes desta casca).
+
+function detPrioColor(p){ return p==='urgent'?'#dc2626':(p==='high'?'#f59e0b':'#cbd5e1'); }
+
+/* ============================================================
+   DETALHADO v1: Plano B (baseline congelado + 7 estados + 2 eixos)
+   Handoff seção 5. Substitui o espelho vivo puro do v12.
+   ============================================================ */
+
+// Projetos fora da matriz do Detalhado (vão para calendários próprios). Seção 5.8.
+const DET_EXCLUDE = ['redes'];
+// Ordem das semanas (S1 < S2 < S3 < S4). Seção 5.2.
+const WK_ORDER = {S1:1,S2:2,S3:3,S4:4};
+// Status que contam como concluída (chegam só com include_closed=true no refresh).
+const DET_DONE = ['concluído','concluido','concluída','concluida','fechado','closed','done','complete'];
+let DET_SIM = false; // modo teste do motor (desligado por padrão)
+
+function detIsDone(it){ return DET_DONE.includes(String(it.status||'').toLowerCase()); }
+function detEsc(s){ return String(s).replace(/</g,'&lt;'); }
+
+// slug estável para compor a chave da tarefa-mãe (independe da data).
+function detSlug(s){
+  return String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'').slice(0,60);
+}
+// Chave estável da tarefa-mãe. v1 SINTÉTICA: proj::slug(nome) (+#n para colisão).
+// A data NÃO entra na chave de propósito: é o que permite detectar escorregou.
+// A próxima carga ao vivo deve trazer o id REAL do ClickUp (filter_tasks já retorna).
+function detKey(proj,name,seen){
+  const base = proj+'::'+detSlug(name);
+  const n=(seen[base]=(seen[base]||0)+1);
+  return n>1 ? base+'#'+n : base;
+}
+
+// Achata window.DET (excl. redes) numa lista de tarefas-mãe com chave + semana.
+function detFlatten(D){
+  const seen={}, out=[];
+  D.rows.forEach(r=>{
+    if(DET_EXCLUDE.includes(r.num)) return;
+    D.weeks.forEach(w=>{
+      (r.byWeek[w]||[]).forEach(it=>{
+        out.push(Object.assign({},it,{proj:r.num,color:r.color,week:w,key:detKey(r.num,it.name,seen)}));
+      });
+    });
+  });
+  return out;
+}
+
+// BASELINE congelado (seção 5.4). Gerado UMA vez a partir do estado atual.
+// {month, frozenAt, synthetic, tasks:{ key:{proj,week,resp,due,status,name,kind} }}.
+function detFreeze(D){
+  const tasks={}, seen={};
+  D.rows.forEach(r=>{
+    if(DET_EXCLUDE.includes(r.num)) return;
+    D.weeks.forEach(w=>{
+      (r.byWeek[w]||[]).forEach(it=>{
+        tasks[detKey(r.num,it.name,seen)]={proj:r.num,week:w,resp:it.resp,due:it.due,status:it.status,name:it.name,kind:it.kind};
+      });
+    });
+  });
+  return {month:D.month, frozenAt:D.today, synthetic:true, tasks:tasks};
+}
+
+// computeDelta: cruza baseline (B) x vivo (L). Dois eixos independentes (5.1, 5.2).
+// Eixo atrasada (vs hoje): usa it.overdue, já calculado contra hoje na carga.
+// Eixo escorregou (vs plano): compara semana viva x semana do baseline.
+function detDelta(BASE, live){
+  const B=BASE.tasks, liveByKey={}, adh={}, ghosts={};
+  live.forEach(t=>liveByKey[t.key]=t);
+  function bucket(p){ return adh[p]||(adh[p]={base:0,done:0,slip:0,early:0,nova:0,left:0,pct:0}); }
+  // baseline: total por projeto + saiu do plano (id em B, ausente do vivo)
+  Object.keys(B).forEach(k=>{
+    const b=B[k]; bucket(b.proj).base++;
+    if(!liveByKey[k]){ bucket(b.proj).left++; (ghosts[b.proj]=ghosts[b.proj]||[]).push(b); }
+  });
+  // classifica cada tarefa viva
+  live.forEach(t=>{
+    const b=B[t.key];
+    if(detIsDone(t)){ t._state='concluida'; if(b) bucket(t.proj).done++; return; }
+    if(!b){ t._state='nova'; t._planWeek=null; bucket(t.proj).nova++; return; }
+    const wl=WK_ORDER[t.week], wb=WK_ORDER[b.week]; t._planWeek=b.week;
+    if(wl>wb){ t._state='escorregou'; bucket(t.proj).slip++; }
+    else if(wl<wb){ t._state='adiantou'; bucket(t.proj).early++; }
+    else t._state='no-prazo';
+  });
+  Object.keys(adh).forEach(p=>{ const a=adh[p]; a.pct=a.base?Math.round(100*a.done/a.base):0; });
+  return {adh, ghosts};
+}
+
+// MODO TESTE: mutações ROTULADAS sobre uma cópia do vivo, para exercitar os 7 estados.
+// Desligado por padrão. Nada aqui é dado real do ClickUp.
+function detSimulate(live){
+  const L=live.map(t=>Object.assign({},t));
+  const find=(proj,part)=>L.findIndex(t=>t.proj===proj && t.name.indexOf(part)>-1);
+  let i;
+  i=find(116,'Divulgação da finalização'); if(i>-1){ L[i].week='S4'; L[i].overdue=false; L[i]._sim=true; } // escorregou (era S3)
+  i=find(124,'Aplicar checklist desmobilização'); if(i>-1){ L[i].week='S3'; L[i]._sim=true; }              // adiantou (era S4)
+  i=find(119,'Acompanhamento da finalização'); if(i>-1){ L[i].status='concluído'; L[i]._sim=true; }         // concluída
+  i=find(121,'Reunião Kick-off'); if(i>-1){ L.splice(i,1); }                                                 // saiu do plano (vira fantasma S1)
+  L.push({proj:117,color:'#7c3aed',week:'S4',name:'Nova tarefa fora do plano',resp:'Abilio',
+          status:'planejamento',prio:'normal',kind:'work',overdue:false,key:'117::__sim_nova__',_sim:true}); // nova
+  return L;
+}
+
+// Chip vivo, com selo de desvio. Atrasada (vermelho + relógio) já vem de it.overdue.
+function detChip(it){
+  const color=it.color||'#9ca3af';
+  const cls=['det-chip']; if(it.overdue)cls.push('over'); if(it.kind==='rotina')cls.push('rotina');
+  const dot=`<span class="pdot" style="background:${detPrioColor(it.prio)}"></span>`;
+  const clk=it.overdue?'<span class="det-clock" title="atrasada (vence antes de hoje)">⏰</span>':'';
+  const resp=it.resp&&it.resp!=='—'?it.resp:'sem responsável';
+  const nm=(it._sim?'🧪 ':'')+detEsc(it.name);
+  let selo='';
+  if(it._state==='escorregou') selo=`<span class="det-selo selo-slip">↘ planejada: ${it._planWeek}</span>`;
+  else if(it._state==='adiantou') selo=`<span class="det-selo selo-early">↗ adiantou (era ${it._planWeek})</span>`;
+  else if(it._state==='nova') selo=`<span class="det-selo selo-new">✦ nova (fora do plano)</span>`;
+  if(it._sim) selo+=`<span class="det-selo selo-sim">🧪 simulação</span>`;
+  return `<div class="${cls.join(' ')}" style="border-left-color:${color}" title="${detEsc(it.name).replace(/"/g,'&quot;')} · ${resp} · vence ${it.due} · ${it.status}">
+    <div class="det-chip-name">${nm}</div>
+    <div class="det-chip-meta">${dot}<span>${resp}</span><span>· ${it.due}</span>${clk}</div>${selo}</div>`;
+}
+// Fantasma: tarefa do baseline que sumiu do vivo (saiu do plano), na semana planejada.
+function detGhost(g){
+  return `<div class="det-ghost" title="saiu do plano: estava no baseline (${g.week}) e sumiu do vivo">
+    <div class="gname">👻 ${detEsc(g.name)}</div>
+    <div class="gmeta">saiu do plano · era ${g.week}</div></div>`;
+}
+
+function buildSubSemanas(){
+  const D=window.DET; const cont=document.getElementById('semanas-content'); if(!cont)return; cont.innerHTML='';
+  if(!window.BASELINE) window.BASELINE = detFreeze(D);   // congela uma vez
+  const BASE = window.BASELINE;
+  let live = detFlatten(D);
+  if(DET_SIM) live = detSimulate(live);
+  const delta = detDelta(BASE, live);
+  const baseN = Object.keys(BASE.tasks).length;
+
+  // mapas para render
+  const liveCell={}, ghostCell={}, pw={S1:0,S2:0,S3:0,S4:0}; let openTot=0;
+  live.forEach(t=>{
+    if(detIsDone(t)) return;                 // concluída não entra na célula (5.4)
+    ((liveCell[t.proj]=liveCell[t.proj]||{})[t.week]=(liveCell[t.proj][t.week]||[])).push(t);
+    pw[t.week]++; openTot++;
+  });
+  Object.keys(delta.ghosts).forEach(p=>delta.ghosts[p].forEach(g=>{
+    ((ghostCell[p]=ghostCell[p]||{})[g.week]=(ghostCell[p][g.week]||[])).push(g);
+  }));
+
+  // resumo
+  const sum=document.createElement('div'); sum.className='det-summary';
+  sum.innerHTML=`<span class="det-sum-pill"><b>${openTot}</b> tarefas a fazer</span>
+    <span class="det-sum-pill"><b>${baseN}</b> no baseline</span>
+    <span class="det-sum-pill wbar">distribuição:
+      <span class="wseg">S1 ${pw.S1}</span>·<span class="wseg">S2 ${pw.S2}</span>·<span class="wseg">S3 ${pw.S3}</span>·<span class="wseg">S4 ${pw.S4}</span></span>
+    <span class="det-sum-pill">${D.summary.exec} execução <small style="font-weight:500;color:var(--gray)">→ Calendário</small></span>`;
+  cont.appendChild(sum);
+
+  // banner do baseline + botão de teste
+  const fz=document.createElement('div'); fz.className='det-freeze';
+  fz.innerHTML=`📌 Plano congelado em <b>${BASE.frozenAt}</b> · <b>${baseN}</b> tarefas-mãe no baseline. O vivo do ClickUp é comparado contra este plano: o chip fica na semana viva e o desvio aparece como selo.
+    <button class="det-sim-btn" onclick="DET_SIM=!DET_SIM;buildSubSemanas()">${DET_SIM?'⛔ sair do modo teste':'🧪 simular desvios'}</button>`;
+  cont.appendChild(fz);
+
+  if(DET_SIM){
+    const sb=document.createElement('div'); sb.className='det-simbar';
+    sb.innerHTML=`<b>MODO TESTE DO MOTOR.</b> Os cartões marcados 🧪 são desvios artificiais para validar a classificação. Nada aqui é dado real do ClickUp. Esperado: <b>116</b> mostra ↘ escorregou em S4, <b>124</b> mostra ↗ adiantou em S3, <b>117</b> ganha um ✦ nova, <b>119</b> some da célula e conta como ✓ concluída na aderência, e <b>121</b> mostra um 👻 saiu do plano na semana planejada (S1).`;
+    cont.appendChild(sb);
+  }
+
+  // legenda de estados
+  const lg=document.createElement('div'); lg.className='det-legend2';
+  lg.innerHTML=`
+    <span class="det-lg"><i style="background:#dc2626"></i>atrasada (vs hoje)</span>
+    <span class="det-lg"><i style="background:#f59e0b"></i>↘ escorregou (vs plano)</span>
+    <span class="det-lg"><i style="background:#3b82f6"></i>↗ adiantou</span>
+    <span class="det-lg"><i style="background:#16a34a"></i>✦ nova</span>
+    <span class="det-lg"><i style="background:#94a3b8"></i>👻 saiu do plano</span>
+    <span class="det-lg"><i style="background:#cbd5e1"></i>no prazo do plano</span>`;
+  cont.appendChild(lg);
+
+  // alerta de higiene de datas
+  if(pw.S4 >= (pw.S1+pw.S2+pw.S3) && openTot>0){
+    const al=document.createElement('div'); al.className='det-alert';
+    al.innerHTML=`<b>Atenção de higiene de datas:</b> ${pw.S4} das ${openTot} tarefas a fazer caem em S4 (fim do mês), muitas no mesmo dia (26/jun): provável data-padrão em lote, não plano real. O congelamento na reunião de portfólio força a higiene no momento certo (handoff 5.7).`;
+    cont.appendChild(al);
+  }
+
+  // grade
+  const grid=document.createElement('div'); grid.className='det-grid';
+  let html=`<div class="det-h det-h-proj">Projeto · aderência</div>`;
+  D.weeks.forEach(w=>{ const now=w==='S4'; html+=`<div class="det-h det-h-wk${now?' det-h-now':''}">${w}<small>${D.weekRange[w]} jun</small></div>`; });
+  D.rows.forEach(r=>{
+    if(DET_EXCLUDE.includes(r.num)) return;
+    const a = delta.adh[r.num] || {base:0,done:0,slip:0,early:0,nova:0,left:0,pct:0};
+    const fase = r.fase?`<span class="det-fase" style="background:${r.color}22;color:${r.color}">Fase: ${r.fase}</span>`:'';
+    const adhx = `plano ${a.base} · ✓${a.done}`+(a.slip?` · ↘${a.slip}`:``)+(a.early?` · ↗${a.early}`:``)+(a.nova?` · ✦${a.nova}`:``)+(a.left?` · 👻${a.left}`:``);
+    html+=`<div class="det-proj"><div class="det-proj-top"><span class="det-badge" style="background:${r.color}">${r.num}</span>
+      <span><span class="det-proj-name">${r.label}</span><br><span class="det-proj-sp">${r.sponsor}</span></span></div>${fase}
+      <div class="det-adh"><div class="det-adh-bar"><div class="det-adh-fill" style="width:${a.pct}%"></div></div><span class="det-adh-num">${a.pct}%</span></div>
+      <div class="det-adh-x">${adhx}</div></div>`;
+    D.weeks.forEach(w=>{
+      const now=w==='S4';
+      const items=(liveCell[r.num]&&liveCell[r.num][w])||[];
+      const gh=(ghostCell[r.num]&&ghostCell[r.num][w])||[];
+      if(!items.length && !gh.length){ html+=`<div class="det-cell${now?' now':''}"><div class="det-cell-empty">·</div></div>`; return; }
+      const chips=items.map(detChip).join('');
+      const ghosts=gh.map(detGhost).join('');
+      const cnt=items.length>2?`<div class="det-cell-count">${items.length} itens</div>`:'';
+      html+=`<div class="det-cell${now?' now':''}">${chips}${ghosts}${cnt}</div>`;
+    });
+  });
+  grid.innerHTML=html; cont.appendChild(grid);
+
+  // rodapé / contrato de refresh
+  const fn=document.createElement('div'); fn.className='fnote'; fn.style.marginTop='16px';
+  fn.innerHTML=`🔒 <strong>Plano B ativo (baseline congelado).</strong> O vivo do ClickUp é comparado contra o plano: <strong>atrasada</strong> mede contra hoje (vermelho + ⏰), <strong>escorregou</strong> mede contra o plano (selo âmbar com a semana planejada). Os dois eixos são independentes: mover a data foge do vermelho mas acende o selo de escorregou, então a fuga fica visível.<br>
+  🔄 <strong>Refresh (1 chamada):</strong> filter_tasks · folder 90115187061 · due_date do mês · subtasks=false · <strong>include_closed=true</strong> · order_by=due_date. O include_closed=true distingue concluída (chegou fechada) de saiu do plano (sumiu) e alimenta a aderência. A matriz mostra só o que falta; concluídas contam só na métrica.<br>
+  🔑 <strong>Chave da tarefa-mãe:</strong> v1 sintética (projeto + nome), estável à mudança de data. Próxima carga ao vivo deve trazer o <strong>id real do ClickUp</strong> (filter_tasks já retorna) para o casamento ficar à prova de renomeação e de nomes repetidos (ex.: 3 tarefas "ES" no 132).`;
+  cont.appendChild(fn);
+}
+
+// SUBVIEW 5 — calendar (Modelo B: cor por projeto + foto + patrocinador)
+let calFilter=null;
+
+// Mapa oficial de cor por projeto (número base)
+const PROJ_COLOR = {74:'#155e1b',115:'#f59e0b',116:'#ec4899',117:'#16a34a',119:'#0ea5e9',120:'#1e3a8a',121:'#8b5cf6',122:'#0d9488',124:'#0d9488',125:'#7c3aed',126:'#06b6d4',127:'#d97706',128:'#65a30d',129:'#84cc16',132:'#64748b',133:'#dc2626'};
+
+// Número base do projeto a partir do campo proj do evento ("120. Nome" -> "120")
+function projNum(ev){ const m=String(ev&&ev.proj||'').match(/^\d+/); return m?m[0]:''; }
+function projColor(ev){ return PROJ_COLOR[projNum(ev)] || '#6b7280'; }
+
+// Nome curto e patrocinador derivados do próprio PROJECTS (campo client), sem inventar
+function projMeta(ev){
+  const n = projNum(ev);
+  const matches = PROJECTS.filter(p=>String(p.id).replace(/[^0-9].*$/,'')===n);
+  const name = matches.length ? matches[0].name : String(ev&&ev.proj||'').replace(/^\d+\.?\s*/,'');
+  const sponsor = [...new Set(matches.map(p=>p.client).filter(Boolean))].join(' · ');
+  return {num:n, name, sponsor};
+}
+
+// Legenda dinâmica: só os projetos que aparecem no mês
+function buildCalLegend(){
+  const el=document.getElementById('cal-legend'); if(!el) return;
+  const nums=[...new Set(CAL_EVENTS.map(projNum).filter(Boolean))].sort((a,b)=>a-b);
+  el.innerHTML = nums.map(n=>{
+    const meta=projMeta({proj:n+'.'}); const col=PROJ_COLOR[n]||'#6b7280';
+    const spon = meta.sponsor ? ' · '+meta.sponsor : '';
+    return `<div class="cal-leg"><span class="cl-dot" style="background:${col}"></span>#${n} ${meta.name}${spon}</div>`;
+  }).join('');
+}
+
+function buildCalendar(){
+  buildCalLegend();
+  const grid=document.getElementById('cal-grid'); if(!grid) return;
+  grid.innerHTML='';
+  const dows=['Seg','Ter','Qua','Qui','Sex','Sáb','Dom'];
+  dows.forEach(d=>{const e=document.createElement('div');e.className='cal-dow';e.textContent=d;grid.appendChild(e);});
+  const byDay={};
+  CAL_EVENTS.forEach(ev=>{
+    if(calFilter && ev.who!==calFilter) return;
+    (byDay[ev.day]=byDay[ev.day]||[]).push(ev);
+  });
+  for(let day=1; day<=30; day++){
+    const cell=document.createElement('div');
+    const dow=(day-1)%7;
+    cell.className='cal-day'+((dow===5||dow===6)?' weekend':'');
+    let evHtml='';
+    (byDay[day]||[]).forEach(ev=>{
+      const col=projColor(ev); const meta=projMeta(ev);
+      const av = ev.who && IMGS[ev.who] ? `<img class="ce-av" src="${IMGS[ev.who]}" alt="${COORD_NAMES[ev.who]||ev.who}">` : '';
+      const spon = meta.sponsor ? `<span class="ce-spon" title="${meta.sponsor}">${meta.sponsor}</span>` : '';
+      const shortName = ev.name.length>42 ? ev.name.slice(0,42)+'…' : ev.name;
+      const tags=[];
+      if(ev.capt) tags.push('<span class="ce-capt">📷 Captação</span>');
+      if(ev.ntics) tags.push('<span class="ce-ntics">👤 NTICS</span>');
+      const tagHtml = tags.length ? `<div class="ce-tags">${tags.join('')}</div>` : '';
+      const tip = `${ev.name} — #${meta.num} ${meta.name}${meta.sponsor? ' · '+meta.sponsor:''}`;
+      evHtml += `<div class="cal-ev" style="--c:${col}" title="${tip}">`
+              + `<div class="ce-top">${av}<span class="ce-pid">#${meta.num}</span>${spon}</div>`
+              + `<div class="ce-act">${shortName}</div>${tagHtml}</div>`;
+    });
+    cell.innerHTML=`<span class="cal-daynum">${day}</span><div class="cal-events">${evHtml}</div>`;
+    grid.appendChild(cell);
+  }
+}
+
+// ── PLANO DE AJUSTES (reconciliação) ──
+function buildPlanoAjustes(){
+  const items = [
+    {p:'P0', type:'Decisão', color:'#dc2626', title:'Reunião de redistribuição de coordenação (Bruna saindo)',
+     desc:'Bruna sustenta 4 projetos (74, 120, 121, 122). Decidir nominalmente quem assume cada um antes de qualquer ajuste no ClickUp. Sem isso, atribuir tarefa órfã significa atribuir a coordenador que não vai existir.',
+     items:['#74 Áster — sugestão Raíza (finalização leve)','#120 — manter Bruna até Execução StatKraft terminar (jul)','#121 TAG — definir antes do Kick-off jul/26','#122 Repsol — definir antes do término Fase Lab 04/jun']},
+    {p:'P0', type:'Decisão', color:'#dc2626', title:'Resolver alocação do Jeferson',
+     desc:'Gabarito coloca Jeferson em engajamento de 115, 121 e 122. No ClickUp ele só aparece no 133 (4 tasks). Decisão binária: alocar formalmente nos 3 projetos ou retirar do gabarito.',
+     items:['Reunião curta com Jeferson sobre capacidade','Se entrar: criar tarefas de engajamento em 115/121/122','Se sair: atualizar gabarito']},
+    {p:'P0', type:'Decisão', color:'#dc2626', title:'Decidir 115 Robótica 2ED',
+     desc:'Gabarito diz Jéssica, ClickUp mostra Lucas. Bloqueia atribuição de ~30 tasks órfãs.',
+     items:['Definir: Jéssica entra ou Lucas assume oficial e gabarito muda']},
+    {p:'P0', type:'Estrutura', color:'#dc2626', title:'Destravar handover Samarco (Bruna → Lucas)',
+     desc:'3 tasks urgent vencidas bloqueiam Lucas de assumir o 132 em junho:',
+     items:['868jrbh24 — SharePoint Bruna→Lucas','868jrbh3b — Reunião Rayane Teams','868jrbh2c — Adicionar Priscila nos relatórios']},
+    {p:'P1', type:'Tag', color:'#0891b2', title:'Criar etiqueta "NTICS em Campo"',
+     desc:'Gabarito prevê 3 etiquetas no calendário de execução. ClickUp só tem 📍execução e captação em campo. Criar a terceira para distinguir presença física da equipe.',
+     items:['Criar tag <code>ntics em campo</code>','Aplicar em tasks de execução onde há presença física confirmada','Hoje o sistema usa "tem responsável atribuído" como proxy — solução paliativa']},
+    {p:'P1', type:'Tag', color:'#0891b2', title:'Eliminar tag malformada "nticsemcampo"',
+     desc:'Variante sem espaço aplicada em pelo menos 1 task (124 CEJU Workshop Fotografia 28/05). Substituir por 📍execução.',
+     items:['Buscar todas as ocorrências de "nticsemcampo"','Substituir por 📍execução','Garantir consistência em todo o portfólio']},
+    {p:'P1', type:'Tag', color:'#0891b2', title:'Decidir sobre etiqueta "🔴 Crítico"',
+     desc:'Não existe no ClickUp. Espaço reservado no gabarito. Sem decisão, sinal de criticidade fica órfão na visão semanal.',
+     items:['Opção A: criar tag <code>🔴 crítico</code> para uso no Norteador semanal','Opção B: usar prioridade nativa "urgent" do ClickUp como sinal','Decidir e padronizar uma das duas']},
+    {p:'P1', type:'Fase', color:'#7c3aed', title:'Alinhar campo FASE ao gabarito (8 fases)',
+     desc:'Campo FASE atual no ClickUp tem: Venda, Lab NTICS, Kick-off, Planejamento, Prep.Op.Orç, Pré-Execução, Execução, Fechamento. Gabarito tem 7 fases lineares. De-para acima resolve no nível conceitual, mas é preciso aplicar nas tasks.',
+     items:['Aplicar de-para em todas as listas-projeto','Marcos FASE 📌 atuais devem refletir o vocabulário do gabarito','Atenção: Engajamento e Pré-Produção do gabarito mapeiam para Pré-Execução/Prep.Op.Orç no ClickUp — manter distinção por nome de task']},
+    {p:'P1', type:'Marco', color:'#7c3aed', title:'Implementar marco "Kickoff Interno"',
+     desc:'Gabarito define KI como ponto de passagem PMO → Produção. Não existe equivalente no ClickUp.',
+     items:['Criar tag <code>kickoff-interno</code> OU criar task-marco padrão em cada projeto','Sugestão: task com nome "📌 KICKOFF INTERNO — Passagem para Produção" entre Mockup/Plan. e Pré-Execução']},
+    {p:'P1', type:'Fase', color:'#7c3aed', title:'Corrigir Fase PMBOK (ordem errada)',
+     desc:'Hoje no ClickUp: Iniciação → Planejamento → Execução → Encerramento → Monitoramento. Correto pelo PMBOK: Monitoramento é PARALELO, deve vir antes do Encerramento.',
+     items:['Reordenar opções do campo FASE PMBOK','Ordem correta: Iniciação · Planejamento · Execução · Monitoramento (paralelo) · Encerramento','Documentar que Monitoramento é transversal, não sequencial']},
+    {p:'P1', type:'Responsável', color:'#f59e0b', title:'Formalizar Mayara como coord do 124 Compagás',
+     desc:'Já operando como tal (25 tasks operacionais CEJU, todos os relatórios). Gabarito já foi atualizado neste artefato. Refletir no ClickUp.',
+     items:['Atualizar campo de responsável da lista 124','Comunicar à equipe','Sem mudança de carga real — apenas reconhecimento']},
+    {p:'P2', type:'Estrutura', color:'#f59e0b', title:'Preenchimento de ~545 tarefas órfãs',
+     desc:'Concentradas em 7 projetos. Só executar DEPOIS das decisões P0. Detalhe por projeto:',
+     items:['#122 Repsol — ~150 órfãs · após Fase Lab (04/jun)','#129 CNH Agrofuturo — ~115 órfãs · atribuir Lucas + Ana C. Xavier','#126 GRU Ecoarte — ~85 órfãs · marcos FASE sem data, Jéssica define','#128 CNH Festival — ~85 órfãs · esqueleto-fechamento','#121 TAG — ~90 órfãs · bloqueado por P0','#115 Robótica 2ED — ~80 órfãs · bloqueado por P0','#127 — ~30 órfãs no esqueleto-fechamento']},
+    {p:'P2', type:'Estrutura', color:'#f59e0b', title:'Esqueletos-fechamento dos CNH (128 + 129)',
+     desc:'~180 tarefas template idênticas de fechamento, todas em backlog, sem data, sem responsável. Poluem relatórios e métricas.',
+     items:['Decisão estrutural: mover para sub-folder "fechamento futuro" e ativar só quando Execução terminar (out/26)','Alternativa: datar e atribuir agora (consome 2 dias de Lucas)','Recomendação do relatório: opção A']},
+    {p:'P2', type:'Nomenclatura', color:'#f59e0b', title:'Higiene de tarefas-lixo e placeholders',
+     desc:'Tasks com nomes genéricos ou inválidos distorcem métricas:',
+     items:['#74 — Task com nome "\\" (868jubt60) — renomear ou excluir','#132 — Tasks vagas "ES", "MG", "MG" duplicadas — adicionar escopo','#132 — "Tarefas Check point 22/05" (868jrbkun) — atribuir ou arquivar','Placeholders "Cidade X / Empresa X / Material X" em #121, #122, #126, #128, #129 — substituir por valores reais','"Captação em Campo" duplicada sem diferenciador em #115, #121, #122, #127 — adicionar cidade/data','"Arrumar pastas fotos em campo" duplicada em #116, #117, #119, #125 — padronizar nomenclatura']},
+    {p:'P2', type:'Estrutura', color:'#f59e0b', title:'Mover rotinas do Bellmond para lista própria',
+     desc:'🔁 Segunda Clareza, 🔁 Sexta Fechamento, 🔁 Dia 18 Pedidos de Compra moram dentro da lista 133, mas Bellmond opera transversalmente. Poluem o projeto.',
+     items:['Criar lista de rotinas externa','Mover tasks recorrentes para lá','Manter no 133 apenas tasks ligadas ao Caminhão ODS']},
+    {p:'P3', type:'Estrutura', color:'#22c55e', title:'Criar lista CGA Cinegastroarte',
+     desc:'Gabarito coloca Lucas como dono, início jul/26. Sem lista criada no ClickUp.',
+     items:['Decidir: criar estrutura mínima agora (régua FASE) ou esperar Kick-off formal','Recomendação: criar agora — facilita planejamento de carga']},
+    {p:'P3', type:'Estrutura', color:'#22c55e', title:'Decidir destino do Wilson & Sons (#118)',
+     desc:'Gabarito trata como projeto distinto, ClickUp não tem lista própria.',
+     items:['Opção A: criar lista #118 com régua independente','Opção B: manter como sub-bloco interno do 122 Repsol','Impacta cálculo de carga do novo coordenador do 122']},
+    {p:'P3', type:'Estrutura', color:'#22c55e', title:'Sub-tracks Manaus/Rio do 133',
+     desc:'133 Vibra tem rodadas Manaus (jun) e Rio (data?). Hoje Manaus é bloco implícito.',
+     items:['Decidir: sub-folder por cidade ou sub-tracking por etiqueta','Implementar antes do Rio (set/26)']},
+    {p:'P4', type:'Operacional', color:'#16a34a', title:'Destrava do 133 Vibra Manaus (sala de guerra)',
+     desc:'~25 peças MKT Marina Chagas em revisão, vencidas 21–26/05. Logística Bellmond vencida 24–26/05. Mídia paga não configurada — Lucas + Abílio vencidos 26–27/05.',
+     items:['Convocar reunião 90min: Bellmond + Marina + Lucas + Abílio','Aprovar lote completo de peças','Destravar logística (estrutura Moacan, licenças)','Decidir mídia paga (campanha + acessos + Pixel + cartão)','Sem isso, evento Manaus chega com 30% das peças em revisão']},
+  ];
+  const cont = document.getElementById('plano-ajustes'); if(!cont) return;
+  // Group by priority
+  const order = ['P0','P1','P2','P3','P4'];
+  const labels = {'P0':'P0 · Crítico (decisões)','P1':'P1 · Estrutural (tags, fases, responsáveis)','P2':'P2 · Higiene (limpeza ClickUp)','P3':'P3 · Estrutura nova (listas a criar)','P4':'P4 · Operacional urgente'};
+  order.forEach(level=>{
+    const group = items.filter(i=>i.p===level);
+    if(!group.length) return;
+    const sec = document.createElement('div');
+    sec.style.cssText = 'margin-bottom:18px';
+    let html = `<div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:${group[0].color};text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding-bottom:4px;border-bottom:2px solid ${group[0].color}">${labels[level]}</div>`;
+    group.forEach(it=>{
+      html += `<div style="background:#fafafa;border:1px solid #e5e7eb;border-left:3px solid ${it.color};border-radius:6px;padding:10px 14px;margin-bottom:8px">
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:4px">
+          <span style="background:${it.color};color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;text-transform:uppercase">${it.type}</span>
+          <strong style="font-size:13px;color:var(--gray-d)">${it.title}</strong>
+        </div>
+        <div style="font-size:12px;color:var(--gray);margin-bottom:6px;line-height:1.5">${it.desc}</div>
+        <ul style="font-size:11px;color:var(--gray-d);padding-left:20px;line-height:1.7;margin:0">
+          ${it.items.map(x=>'<li>'+x+'</li>').join('')}
+        </ul>
+      </div>`;
+    });
+    sec.innerHTML = html;
+    cont.appendChild(sec);
+  });
+}
+
+// ── FILTERS ──
+function filterResp(name,el){
+  document.querySelectorAll('#filter-row .tm').forEach(e=>e.classList.toggle('on',e===el));
+  document.querySelectorAll('#gantt-body tr').forEach(tr=>{
+    const inv=(tr.dataset.involved||'').split(',');
+    const isPrev=tr.classList.contains('row-previsto');
+    tr.classList.toggle('hidden', !inv.includes(name) && !isPrev);
+  });
+}
+function clearFilter(){
+  document.querySelectorAll('#filter-row .tm').forEach(e=>e.classList.remove('on'));
+  document.querySelectorAll('#gantt-body tr').forEach(tr=>tr.classList.remove('hidden'));
+}
+function resetAllSwaps(){
+  Object.keys(respOverrides).forEach(k=>delete respOverrides[k]);
+  Object.keys(whoOverrides).forEach(k=>delete whoOverrides[k]);
+  buildGantt();
+}
+
+let junFilter=null;
+function filterJun(name,el){
+  junFilter=name;
+  document.querySelectorAll('#filter-jun .tm').forEach(e=>e.classList.toggle('on',e===el));
+  calFilter = name;
+  applyJunFilter();
+  buildCalendar();
+}
+function clearJunFilter(){
+  junFilter=null; calFilter=null;
+  document.querySelectorAll('#filter-jun .tm').forEach(e=>e.classList.remove('on'));
+  applyJunFilter();
+  buildCalendar();
+}
+function applyJunFilter(){
+  // macro & semanas: coordinator blocks
+  document.querySelectorAll('#sub-macro .coord-block, #sub-semanas .coord-block').forEach(b=>{
+    b.style.display = (!junFilter || b.dataset.coord===junFilter) ? '' : 'none';
+  });
+  // area blocks
+  document.querySelectorAll('#sub-area .coord-block').forEach(b=>{
+    b.style.display = (!junFilter || b.dataset.coord===junFilter) ? '' : 'none';
+  });
+  // projeto rows
+  document.querySelectorAll('#sub-projeto #proj-table tbody tr').forEach(tr=>{
+    const inv=(tr.dataset.involved||'').split(',');
+    tr.style.display = (!junFilter || inv.includes(junFilter)) ? '' : 'none';
+  });
+}
+
+// ── SUBVIEW SWITCH ──
+function switchSub(name,el){
+  document.querySelectorAll('.subview-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.subview-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sub-'+name).classList.add('active');
+  el.classList.add('active');
+}
+
+// ── TAB ──
+function switchTab(name,el){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  el.classList.add('active');
+}
+
+// ── HISTÓRICO HANDS ON ──
+// Arquivo de snapshots da Clareza da Semana. Cada entrada aponta para o HTML
+// standalone gerado pela skill norteador-semana (campo `file`). Para arquivar
+// uma nova semana: salve o HTML na mesma pasta e adicione uma linha aqui.
+// Marque current:true na semana corrente. Deixe file:null em slots ainda vazios.
+const HANDSON_WEEKS = [
+  { id:'S1', range:'01–07/jun', label:'Semana 1', file:null, current:false },
+  { id:'S2', range:'08–14/jun', label:'Semana 2', file:null, current:false },
+  { id:'S3', range:'15–21/jun', label:'Semana 3', file:null, current:false },
+  { id:'S4', range:'22–28/jun', label:'Semana 4', file:'Clareza_da_Semana___22_06_a_28_06_2026.html', current:true }
+];
+
+function buildHandson(){
+  const strip = document.getElementById('ho-strip');
+  const archived = HANDSON_WEEKS.filter(w=>w.file).length;
+  document.getElementById('handson-badge').textContent = '· '+archived+' de '+HANDSON_WEEKS.length+' semanas arquivadas';
+  strip.innerHTML='';
+  HANDSON_WEEKS.forEach(w=>{
+    const el=document.createElement('div');
+    const hasFile=!!w.file;
+    el.className='ho-week'+(hasFile?'':' empty');
+    el.dataset.id=w.id;
+    let badge='';
+    if(w.current) badge='<span class="ho-wk-badge">ATUAL</span>';
+    else if(!hasFile) badge='<span class="ho-wk-badge empty-badge">VAZIA</span>';
+    el.innerHTML=`${badge}<div class="ho-wk-id">${w.id}</div><div class="ho-wk-range">${w.range}</div>`+
+      `<div class="ho-wk-meta">${hasFile?'snapshot arquivado':'aguardando Clareza'}</div>`;
+    if(hasFile) el.onclick=()=>showHandsonWeek(w.id,el);
+    strip.appendChild(el);
+  });
+  // abre por padrão a semana atual (ou a última arquivada)
+  const def = HANDSON_WEEKS.find(w=>w.current && w.file)
+            || [...HANDSON_WEEKS].reverse().find(w=>w.file);
+  if(def){
+    const node=[...strip.children].find(c=>c.dataset.id===def.id);
+    showHandsonWeek(def.id,node);
+  } else {
+    document.getElementById('ho-viewer-bar').innerHTML='<strong>Histórico Hands On</strong>';
+    document.getElementById('ho-frame-wrap').innerHTML=
+      '<div class="ho-empty-state"><span class="ico">🗂️</span>Nenhuma Clareza arquivada ainda.<br>'+
+      'Gere a Clareza da semana, salve o HTML na pasta e preencha o campo <code>file</code> em <code>HANDSON_WEEKS</code>.</div>';
+  }
+}
+
+function showHandsonWeek(id,node){
+  const w=HANDSON_WEEKS.find(x=>x.id===id); if(!w||!w.file) return;
+  document.querySelectorAll('.ho-week').forEach(c=>c.classList.remove('on'));
+  if(node) node.classList.add('on');
+  const bar=document.getElementById('ho-viewer-bar');
+  bar.innerHTML=`<strong>${w.id} · ${w.range}</strong>`+
+    (w.current?'<span class="badge-now">Semana atual</span>':'<span class="badge-soon">Arquivada</span>')+
+    `<a class="ho-open-link" href="${w.file}" target="_blank" rel="noopener">Abrir em tela cheia ↗</a>`;
+  document.getElementById('ho-frame-wrap').innerHTML=
+    `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;min-height:300px;border:1px dashed #cbd5e1;border-radius:12px;background:#f8fafc;padding:32px;text-align:center">`+
+    `<div style="font-size:42px">📄</div>`+
+    `<div style="font-size:14px;color:#475569;max-width:420px;line-height:1.5">`+
+    `<strong>Clareza ${w.id} · ${w.range}</strong><br>O infográfico abre em página própria, em tela cheia. `+
+    `Mantido fora do painel para não pesar o mensal.</div>`+
+    `<a href="${w.file}" target="_blank" rel="noopener" style="background:var(--green-d);color:#fff;font-weight:700;font-size:13px;padding:9px 18px;border-radius:999px;text-decoration:none">Abrir a Clareza ↗</a>`+
+    `</div>`;
+}
+
+// INIT
+buildGantt();
+buildJunho();
+buildPlanoAjustes();
+buildHandson();
+</script>
+</body>
+</html>
